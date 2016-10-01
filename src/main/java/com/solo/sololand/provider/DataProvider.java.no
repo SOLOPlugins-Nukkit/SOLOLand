@@ -1,0 +1,26 @@
+package com.solo.sololand.provider;
+
+import cn.nukkit.level.Level;
+
+import com.solo.sololand.Main;
+
+public class DataProvider{
+
+  private Main plugin;
+
+  public DataProvider(Main plugin){
+    this.plugin = plugin;
+  }
+
+  public boolean loadWorld(Level level){
+    this.loadWorld(level.getFolderName());
+  }
+  public boolean loadWorld(String levelName){
+    File levelFolder = new File(Server.getDataPath() + File.separator + levelName);
+    Config properties()
+  }
+
+  public boolean loadLand(){
+  }
+
+}
