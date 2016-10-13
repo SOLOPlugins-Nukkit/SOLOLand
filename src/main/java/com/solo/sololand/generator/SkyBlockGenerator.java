@@ -209,6 +209,6 @@ public class SkyBlockGenerator extends Generator{
 
   @Override
   public Vector3 getSpawn() {
-    return new Vector3(108, this.floorLevel, 108);
+    return new Vector3(100, this.floorLevel, 100);
   }
 }

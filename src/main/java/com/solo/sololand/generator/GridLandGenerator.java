@@ -89,7 +89,6 @@ public class GridLandGenerator extends Generator {
 
     int gridlandx = worldX % 36;
     int gridlandz = worldZ % 36;
-    
 
     //center grass part
     if(

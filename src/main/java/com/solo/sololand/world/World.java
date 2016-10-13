@@ -15,21 +15,41 @@ import java.util.List;
 
 import java.io.File;
 
+import com.solo.sololand.Main;
+import com.solo.sololand.command.custom.CustomWorldCommand;
 import com.solo.sololand.land.Land;
+import com.solo.sololand.data.DataBase;
 import com.solo.sololand.util.Debug;
 
 public class World{
 
   //class
-  public static HashMap<String, World> worlds = new HashMap<String, World>();
+  public static LinkedHashMap<String, World> worlds = new LinkedHashMap<String, World>();
+  public static final int TYPE_NORMAL = 0;
+  public static final int TYPE_ISLAND = 1;
+  public static final int TYPE_GRID_LAND = 2;
 
   //instance
-  public Level level;
-  public String name;
-  public Config propertiesConfig;
-  public LinkedHashMap<String, Object> properties;
-  public final File worldDir;
-  public final File landDir;
+  public final Level level;
+  public final String name;
+  public LinkedHashMap<String, Object> properties = new LinkedHashMap<String, Object>(){{
+    put("type", World.TYPE_NORMAL);
+    put("customname", "default");
+    put("protect", true);
+    put("invensave", true);
+    put("allowexplosion", false);
+    put("allowburn", false);
+    put("allowfight", false);
+    put("allowcreateland", false);
+    put("allowcreateroom", true);
+    put("allowextendland", true);
+    put("allowresizeland", true);
+    put("defaultlandprice", 20000.0);
+    put("priceperblock", 20.0);
+    put("maxlandcount", 4);
+    put("minlandlength", 5);
+    put("maxlandlength", 100);
+  }};
 
   //lands
   public HashMap<Integer, Land> lands = new HashMap<Integer, Land>();
@@ -37,65 +57,33 @@ public class World{
   public HashMap<String, Integer> recentGetLandByName = new HashMap<String, Integer>();
 
   public World(Level level){
-    this(level, new LinkedHashMap<String, Object>(){{
-      put("customname", level.getFolderName());
-      put("protect", true);
-      put("invensave", true);
-      put("allowexplosion", false);
-      put("allowburn", false);
-      put("allowfight", false);
-      put("allowcreateland", false);
-      put("allowcreateroom", true);
-      put("allowextendland", true);
-      put("allowresizeland", true);
-      put("defaultlandprice", 20000.0);
-      put("priceperblock", 20.0);
-      put("maxlandcount", 4);
-      put("minlandlength", 5);
-      put("maxlandlength", 100);
-    }});
+    this(level, new LinkedHashMap<String, Object>());
   }
 
-  public World (Level level, LinkedHashMap<String, Object> defaultOptions){
+  public World (Level level, LinkedHashMap<String, Object> properties){
     this.name = level.getFolderName();
     this.level = level;
-    Debug.normal(this.name + " 월드 준비중...");
+    this.properties.put("customname", level.getFolderName());
+    this.properties.putAll(properties);
 
-    this.worldDir = new File(Server.getInstance().getDataPath() + File.separator + "worlds" + File.separator + level.getFolderName());
-    this.landDir = new File(this.worldDir + File.separator + "land");
-
-    this.landDir.mkdir();
-
-    this.propertiesConfig = new Config(new File(this.worldDir, "properties.yml"), Config.YAML, defaultOptions);
-    this.properties = (LinkedHashMap<String, Object>) this.propertiesConfig.getAll();
-    Debug.normal("properties 로드 완료");
-
-    LinkedHashMap<String, Object> data;
-    File[] fileList = this.landDir.listFiles();
-    int count = 0;
-    for(File landFile : fileList) {
-      if(!landFile.isFile()){
-        continue;
-      }
-      Land land = new Land((LinkedHashMap<String, Object>) (new Config(landFile, Config.YAML).getAll()));
-      this.lands.put(land.getNumber(), land);
-      ++count;
-    }
-    Debug.normal("땅 로드 완료 (로드된 땅 갯수 : " + Integer.toString(count) + ")");
+    //Add new Command !!
+    Main.getInstance().getCommandMap().register(new CustomWorldCommand(this));
   }
 
   /*  #class method  */
   public static void registerWorld(World world){
-    if(World.worlds.containsKey(world.name))
+    if(World.worlds.containsKey(world.name)){
       return;
+    }
     World.worlds.put(world.getName(), world);
     Debug.normal(world.getName() + " 월드 등록 완료");
   }
 
   //Do not use this method !!
   public static void unregisterWorld(World world){
-    if(!World.worlds.containsKey(world.name))
+    if(!World.worlds.containsKey(world.name)){
       return;
+    }
     World.worlds.remove(world.getName(), world);
     Debug.normal(world.getName() + " 월드 등록 해제 완료");
   }
@@ -107,7 +95,16 @@ public class World{
     return World.worlds.get(levelFolderName);
   }
 
-  public static HashMap<String, World> getAll() {
+  public static World getByName(String customname){
+    for(World world : World.worlds.values()){
+      if(world.getCustomName().equals(customname)){
+        return world;
+      }
+    }
+    return null;
+  }
+
+  public static LinkedHashMap<String, World> getAll() {
     return World.worlds;
   }
 
@@ -299,6 +296,10 @@ public class World{
     return this.lands.containsKey(num);
   }
 
+  public void setLands(HashMap<Integer, Land> lands){
+    this.lands = lands;
+  }
+
   public HashMap<Integer, Land> getLands(){
     return this.lands;
   }
@@ -375,10 +376,14 @@ public class World{
   }
 
   public boolean removeLand(int num) {
-    if(!this.lands.containsKey(num))
+    if(!this.lands.containsKey(num)){
       return false;
+    }
     Land land = this.lands.get(num);
-    for(int x = land.startX; x <= land.endX; x++)
+    DataBase.removeLand(this, land);
+
+    /* Sucks! why this code is remain until now? */
+    /*for(int x = land.startX; x <= land.endX; x++)
     for(int z = land.startZ; z <= land.endZ; z++){
       int c = Biome.getBiome(this.level.getBiomeId(x, z)).getColor();
       int r = c >> 16;
@@ -386,9 +391,9 @@ public class World{
       int b = c & 0xff;
       this.level.setBiomeColor(x, z, r, g, b);
       Debug.normal("biome color");
-    }
+    }*/
+
     this.lands.remove(num);
-    (new File(this.landDir + File.separator + Integer.toString(num) + ".yml")).delete();
     return true;
   }
   public boolean removeLand(Land land){
@@ -408,52 +413,6 @@ public class World{
     return null;
   }
 
-  public void save(){
-    this.save(true);
-  }
-  public void save(boolean all) {
-    this.propertiesConfig.setAll(this.properties);
-    this.propertiesConfig.save();
-    Debug.normal(this.name + " 월드 properties 저장 완료");
-
-    Debug.normal(this.name + " 월드 땅 데이터 저장 중...");
-    int count = 0;
-    if(all){
-      for(Land land : this.lands.values()){
-        this.saveLand(land);
-        count++;
-      }
-    }else{ 
-      for(int recNum : this.recentGetLandByNum){
-        this.saveLand(this.getLand(recNum));
-        count++;
-      }
-      this.recentGetLandByNum.clear();
-    }
-    Debug.normal(this.name + " 월드 땅 저장 완료. ( 저장된 땅 갯수 : " + Integer.toString(count) + "개 )");
-  }
-
-  protected void saveLand(Land land){
-    LinkedHashMap<String, Object> data = new LinkedHashMap<String, Object>(); 
-    data.put("landnumber", land.getNumber());
-    data.put("startx", land.startX);
-    data.put("endx", land.endX);
-    data.put("startz", land.startZ);
-    data.put("endz", land.endZ);
-    data.put("issail", land.isSail);
-    data.put("price", land.price);
-    data.put("owner", land.owner);
-    data.put("members", land.members);
-    data.put("spawnpoint", land.spawnPoint);
-    data.put("isallowfight", land.isAllowFight);
-    data.put("isallowaccess", land.isAllowAccess);
-    data.put("isallowpickupitem", land.isAllowPickUpItem);
-    data.put("welcomemessage", land.welcomeMessage);
-    data.put("welcomeparticle", land.welcomeParticle);
-    Config conf = new Config(new File(this.landDir, Integer.toString(land.getNumber()) + ".yml"), Config.YAML);
-    conf.setAll(data);
-    conf.save();
-  }
 }
 
 

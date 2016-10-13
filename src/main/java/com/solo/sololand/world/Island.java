@@ -9,24 +9,31 @@ import java.util.LinkedHashMap;
 
 public class Island extends World{
 
+  public LinkedHashMap<String, Object> properties = new LinkedHashMap<String, Object>(){{
+    put("type", World.TYPE_ISLAND);
+    put("customname", level.getFolderName());
+    put("protect", true);
+    put("invensave", true);
+    put("allowexplosion", false);
+    put("allowburn", false);
+    put("allowfight", false);
+    put("allowcreateland", false);
+    put("allowcreateroom", true);
+    put("allowextendland", false);
+    put("allowresizeland", false);
+    put("defaultlandprice", 20000.0);
+    put("priceperblock", 0.0);
+    put("maxlandcount", 4);
+    put("minlandlength", 5);
+    put("maxlandlength", 100);
+  }};
+
   public Island(Level level){
-    super(level, new LinkedHashMap<String, Object>(){{
-      put("customname", level.getFolderName());
-      put("protect", true);
-      put("invensave", true);
-      put("allowexplosion", false);
-      put("allowburn", false);
-      put("allowfight", false);
-      put("allowcreateland", false);
-      put("allowcreateroom", true);
-      put("allowextendland", false);
-      put("allowresizeland", false);
-      put("defaultlandprice", 20000.0);
-      put("priceperblock", 0.0);
-      put("maxlandcount", 4);
-      put("minlandlength", 5);
-      put("maxlandlength", 100);
-    }});
+    this(level, new LinkedHashMap<String, Object>());
+  }
+
+  public Island(Level level, LinkedHashMap<String, Object> properties){
+    super(level, properties);
   }
 
   public Land createLand(String owner){

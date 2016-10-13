@@ -7,7 +7,9 @@ import cn.nukkit.block.Block;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.level.LevelInitEvent;
+import cn.nukkit.event.server.ServerCommandEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockBurnEvent;
@@ -16,6 +18,7 @@ import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.event.player.PlayerDeathEvent;
+import cn.nukkit.event.player.PlayerCommandPreprocessEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
@@ -39,9 +42,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.solo.sololand.Main;
 import com.solo.sololand.world.World;
 import com.solo.sololand.world.Island;
 import com.solo.sololand.land.Land;
+import com.solo.sololand.data.DataBase;
 import com.solo.sololand.util.Message;
 import com.solo.sololand.util.Queue;
 import com.solo.sololand.util.Economy;
@@ -58,16 +63,32 @@ public class EventListener implements Listener{
     this.plugin = plugin;
   }
 
+  @EventHandler(
+    ignoreCancelled = false,
+    priority = EventPriority.MONITOR
+  )
+  public void onCmdPreprocess(PlayerCommandPreprocessEvent event){
+    if(event.getMessage().startsWith("/")){
+      if(Main.getInstance().getCommandMap().dispatch(event.getPlayer(), event.getMessage().substring(1))){
+        event.setCancelled();
+      }
+    }
+  }
+
+  @EventHandler(
+    ignoreCancelled = false,
+    priority = EventPriority.MONITOR
+  )
+  public void onServerCommand(ServerCommandEvent event){
+    if(Main.getInstance().getCommandMap().dispatch(event.getSender(), event.getCommand())){
+      event.setCancelled();
+    }
+  }
 
   @EventHandler
   public void onLevelInit(LevelInitEvent event){
     Debug.normal("LevelInitEvent 발생");
-    Level level = event.getLevel();
-    if(level.getFolderName().equals("island")){
-      World.registerWorld(new Island(event.getLevel()));
-    }else{
-      World.registerWorld(new World(event.getLevel()));
-    }
+    DataBase.loadWorld(event.getLevel());
   }
 
   @EventHandler

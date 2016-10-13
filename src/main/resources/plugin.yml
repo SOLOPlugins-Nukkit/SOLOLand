@@ -1,16 +1,5 @@
 name: SOLOLand
-version: "§l§b0.2.0§r"
+version: "§l§b1.0.0§r"
 api: ["1.0.0"]
 author: solo
 main: com.solo.sololand.Main
-commands:
-  땅:
-    usage: /땅
-    description: 땅 명령어
-  월드:
-    usage: /월드
-    description: 월드 명령어
-    permission: op
-  섬:
-    usage: /섬
-    description: 섬 명령어

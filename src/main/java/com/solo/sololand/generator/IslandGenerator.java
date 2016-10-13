@@ -219,6 +219,6 @@ public class IslandGenerator extends Generator {
 
   @Override
   public Vector3 getSpawn() {
-    return new Vector3(128, this.floorLevel, 128);
+    return new Vector3(100, this.floorLevel, 100);
   }
 }

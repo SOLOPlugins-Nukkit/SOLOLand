@@ -2,7 +2,7 @@ package com.solo.sololand.task;
 
 import cn.nukkit.scheduler.PluginTask;
 import com.solo.sololand.Main;
-import com.solo.sololand.world.World;
+import com.solo.sololand.data.DataBase;
 
 public class AutoSaveTask extends PluginTask<Main> {
 
@@ -12,8 +12,6 @@ public class AutoSaveTask extends PluginTask<Main> {
 
   @Override
   public void onRun(int currentTick){
-    for(World world : World.getAll().values()){
-      world.save(false);
-    }
+    DataBase.saveWorld(false);
   }
 }
