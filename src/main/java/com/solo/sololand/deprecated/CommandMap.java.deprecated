@@ -1,0 +1,5 @@
+package com.solo.sololand.command;
+
+public class CommandMap extends BaseCommandMap{
+
+}

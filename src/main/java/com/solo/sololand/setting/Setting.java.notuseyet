@@ -1,0 +1,23 @@
+package com.solo.sololand.setting;
+
+public class Setting{
+
+  priavte LinkedHashMap<String, Object> data = new LinkedHashMap<String, Object>(){{
+    put("")
+  }};
+
+  public Setting(){
+  }
+
+  private void load(){
+  }
+  public void save(){
+  }
+
+  public Object get(String key){
+  }
+  
+
+
+
+}

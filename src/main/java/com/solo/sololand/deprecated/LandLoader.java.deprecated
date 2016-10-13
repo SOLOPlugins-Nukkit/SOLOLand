@@ -1,0 +1,86 @@
+package com.solo.sololand.data;
+
+import cn.nukkit.Server;
+import cn.nukkit.level.Level;
+import cn.nukkit.utils.Config;
+
+import com.solo.sololand.world.World;
+import com.solo.sololand.land.Land;
+import com.solo.sololand.util.Debug;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.io.File;
+
+public class LandLoader{
+
+  public static File getLandDir(Level level){
+    return new File(Server.getInstance().getDataPath() + File.separator + "worlds" + File.separator + level.getFolderName() + File.separator + "land");
+  }
+
+  public static HashMap<Integer, Land> load(Level level){
+    File landDir = LandLoader.getLandDir(level);
+    landDir.mkdir();
+    
+    HashMap<Integer, Land> lands = new HashMap<Integer, Land>();
+    int count = 0;
+    for(File landFile : landDir.listFiles()) {
+      if(!landFile.isFile()){
+        continue;
+      }
+      Land land = new Land((LinkedHashMap<String, Object>) (new Config(landFile, Config.YAML).getAll()));
+      lands.put(land.getNumber(), land);
+      ++count;
+    }
+    Debug.normal("땅 로드 완료 (로드된 땅 갯수 : " + Integer.toString(count) + ")");
+    return lands;
+  }
+
+  public static void save(World world){
+    LandLoader.save(world, true);
+  }
+  public static void save(World world, boolean saveAll){
+    int count = 0;
+    if(saveAll){
+      for(Land land : world.getLands().values()){
+        LandLoader.saveLand(land);
+        count++;
+      }
+    }else{ 
+      for(int recNum : world.recentGetLandByNum){
+        LandLoader.saveLand(world.getLand(recNum));
+        count++;
+      }
+      world.recentGetLandByNum.clear();
+    }
+  }
+
+  private static void saveLand(Land land){
+    LinkedHashMap<String, Object> data = new LinkedHashMap<String, Object>(); 
+    data.put("landnumber", land.getNumber());
+    data.put("startx", land.startX);
+    data.put("endx", land.endX);
+    data.put("startz", land.startZ);
+    data.put("endz", land.endZ);
+    data.put("issail", land.isSail);
+    data.put("price", land.price);
+    data.put("owner", land.owner);
+    data.put("members", land.members);
+    data.put("spawnpoint", land.spawnPoint);
+    data.put("isallowfight", land.isAllowFight);
+    data.put("isallowaccess", land.isAllowAccess);
+    data.put("isallowpickupitem", land.isAllowPickUpItem);
+    data.put("welcomemessage", land.welcomeMessage);
+    data.put("welcomeparticle", land.welcomeParticle);
+    Config conf = new Config(new File(LandLoader.landDir, Integer.toString(land.getNumber()) + ".yml"), Config.YAML);
+    conf.setAll(data);
+    conf.save();
+  }
+
+  public static boolean remove(Land land){
+    File target = new File(LandLoader.landDir + File.separator + land.getNumber() + ".yml");
+    return target.delete();
+  }
+
+
+}
