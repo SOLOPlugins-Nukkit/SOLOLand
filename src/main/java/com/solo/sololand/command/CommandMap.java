@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.ArrayList;
 import com.solo.sololand.util.Debug;
+import com.solo.sololand.util.Message;
 
 public class CommandMap<T extends BaseCommand>{
 
@@ -75,11 +76,11 @@ public class CommandMap<T extends BaseCommand>{
       return false;
     }
     if(!sender.hasPermission(cmd.getPermission())){
-      sender.sendMessage("§c권한이 없습니다.");
+      Message.fail(sender, "권한이 없습니다.");
       return true;
     }
     if(!(sender instanceof Player) && cmd.isInGameOnly()){
-      sender.sendMessage("§c인게임에서만 가능합니다.");
+      Message.fail(sender, "인게임에서만 가능합니다.");
       return true;
     }
     String[] newArgs = new String[args.length - 1];
@@ -91,7 +92,7 @@ public class CommandMap<T extends BaseCommand>{
       }
     }
     if(!cmd.execute(sender, newArgs)){
-      sender.sendMessage(cmd.getUsage());
+      Message.usage(sender, cmd.getFullDescription());
     }
     return true;
   }

@@ -19,8 +19,8 @@ import java.io.File;
 public class WorldCreate extends SubCommand{
 
   public WorldCreate(MainCommand mCmd){
-    super(mCmd, "생성", "월드를 생성합니다. 제너레이터에는 야생, 평지, 섬, 스카이블럭, 평야, 빈월드, 스카이그리드 중 하나를 입력하세요. 월드 이름은 영어로 하는 것을 권장합니다.");
-    this.setUsage("/" + mCmd.getName() + " " + this.getName() + " <타입(제너레이터)> <옵션>");
+    super(mCmd, "생성", "월드를 생성합니다. 제너레이터에는 야생, 평지, 섬, 스카이블럭, 평야, 빈월드, 스카이그리드 중 하나를 입력하세요.");
+    this.setUsage("/" + mCmd.getName() + " " + this.getName() + " [이름] <타입(제너레이터)>");
     this.setAliases(new String[]{"만들기", "추가"});
     this.setInGameOnly(false);
     this.setPermission("sololand.command.world.create");
@@ -63,6 +63,7 @@ public class WorldCreate extends SubCommand{
           break;
         case "평야":
           generator = GridLandGenerator.class;
+          worldType = World.TYPE_GRID_LAND;
           break;
         case "빈월드":
           generator = EmptyWorldGenerator.class;

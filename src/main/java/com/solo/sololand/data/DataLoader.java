@@ -7,6 +7,7 @@ import cn.nukkit.utils.Config;
 import com.solo.sololand.land.Land;
 import com.solo.sololand.world.*;
 import com.solo.sololand.util.Debug;
+import com.solo.sololand.util.ProgressBar;
 
 import java.util.LinkedHashMap;
 import java.util.HashMap;
@@ -48,17 +49,21 @@ public class DataLoader{
       return null;
     }
     LinkedHashMap<String, Object> properties = (LinkedHashMap<String, Object>) (new Config(DataLoader.getWorldPropertiesFile(levelName), Config.YAML)).getAll();
-    World world;
-    if(
-      properties.containsKey("type") &&
-      (int) properties.get("type") == World.TYPE_ISLAND
-    ){
-      world = new Island(level, properties);
-      Debug.normal(levelName + " 월드 로드 성공. 월드 타입 : 1");
-    }else{
-      world = new World(level, properties);
-      Debug.normal(levelName + " 월드 로드 성공. 월드 타입 : 0");
+    World world = null;
+    if(properties.containsKey("type")){
+      switch((int) properties.get("type")){
+        case World.TYPE_ISLAND:
+          world = new Island(level, properties);
+          break;
+        case World.TYPE_GRID_LAND:
+          world = new GridLand(level, properties);
+          break;
+      }
     }
+    if(world == null){
+      world = new World(level, properties);
+    }
+    Debug.normal(levelName + " 월드 로드 성공. 월드 타입 : " + Integer.toString(world.getType()));
     world.setLands(DataLoader.loadLand(level));
     Debug.normal(levelName + " 월드 땅 로드 성공.");
     return world;
@@ -90,6 +95,7 @@ public class DataLoader{
 
     HashMap<Integer, Land> lands = new HashMap<Integer, Land>();
     int count = 0;
+    int max = landDir.listFiles().length;
     for(File landFile : landDir.listFiles()) {
       if(!landFile.isFile()){
         continue;
@@ -97,6 +103,9 @@ public class DataLoader{
       Land land = new Land((LinkedHashMap<String, Object>) (new Config(landFile, Config.YAML).getAll()));
       lands.put(land.getNumber(), land);
       ++count;
+      if(count % 1000 == 0 || count >= max){
+        Debug.normal("땅 로드중... (" + Integer.toString(count) + "/" + Integer.toString(max) + ")");
+      }
     }
     Debug.normal("로드된 땅 갯수 : " + Integer.toString(count) + "개");
     return lands;
@@ -108,11 +117,15 @@ public class DataLoader{
   public static void saveLand(World world, boolean saveAll){
     Debug.normal("땅 저장중...");
     int count = 0;
+    int max = world.getLands().values().size();
     for(Land land : world.getLands().values()){
       Config conf = new Config(new File(DataLoader.getLandDir(world.getLevel().getFolderName()) + File.separator + Integer.toString(land.getNumber()) + ".yml"), Config.YAML);
       conf.setAll(DataLoader.landToMap(land));
       conf.save();
       count++;
+      if(count % 1000 == 0 || count >= max){
+        Debug.normal("땅 저장중... (" + Integer.toString(count) + "/" + Integer.toString(max) + ")");
+      }
     }
     Debug.normal("저장된 땅 갯수 : " + Integer.toString(count) + "개");
   }

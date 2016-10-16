@@ -1,6 +1,6 @@
 package com.solo.sololand.util;
 
-public class Page{
+public abstract class Page{
 
   public static final int linesPerPage = 5;
 

@@ -93,29 +93,34 @@ public class Island extends World{
     return true;
   }
 
-  @Override
-  public Land getLand(int x, int z){
+  private Land getLandByAssume(int x, int z){
     Land land;
     int assumeNum = this.getLandNumberByXZ(x, z);
     if(assumeNum > 0){
       land = this.getLand(assumeNum);
       if(land != null){
-        if(land.startX <= x && land.startZ <= z && land.endX >= x && land.endZ >= z){
+        if(this.isInsideLand(land, x, z)){
           return land;
         }
       }
     }
-    for(int num : this.recentGetLandByNum){
-      land = this.getLand(num);
-      if(land != null){
-        if(land.startX <= x && land.startZ <= z && land.endX >= x && land.endZ >= z){
-          return land;
-        }
-      }
+    return null;
+  }
+
+  @Override
+  public Land getLand(int x, int z){
+    Land land;
+    land = this.getLandByAssume(x, z);
+    if(land != null){
+      return land;
+    }
+    land = this.getLandByRecent(x, z);
+    if(land != null){
+      return land;
     }
     for(Land land2 : this.lands.values()){
-      if(land2.startX <= x && land2.startZ <= z && land2.endX >= x && land2.endZ >= z){
-        this.recentGetLandByNum.add(land2.getNumber());
+      if(this.isInsideLand(land2, x, z)){
+        this.recentLands.add(land2.getNumber());
         return land2;
       }
     }

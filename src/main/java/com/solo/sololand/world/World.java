@@ -3,10 +3,9 @@ package com.solo.sololand.world;
 import cn.nukkit.Server;
 import cn.nukkit.Player;
 import cn.nukkit.level.Level;
-import cn.nukkit.level.generator.biome.Biome;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.Config;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -53,8 +52,8 @@ public class World{
 
   //lands
   public HashMap<Integer, Land> lands = new HashMap<Integer, Land>();
-  public ArrayList<Integer> recentGetLandByNum = new ArrayList<Integer>();
-  public HashMap<String, Integer> recentGetLandByName = new HashMap<String, Integer>();
+  public HashSet<Integer> recentLands = new HashSet<Integer>();
+  public HashMap<String, Integer> recentLandsByName = new HashMap<String, Integer>();
 
   public World(Level level){
     this(level, new LinkedHashMap<String, Object>());
@@ -126,6 +125,10 @@ public class World{
 
   public String getName() {
     return this.name;
+  }
+
+  public int getType(){
+    return (int) this.properties.get("type");
   }
 
   public String getCustomName(){
@@ -252,13 +255,6 @@ public class World{
       }
       num++;
     }
-    /*
-    # set glass color, but this is not work yet
-    for(int x = startX; x <= endX; x++)
-    for(int z = startZ; z <= endZ; z++){
-      this.level.setBiomeColor(x, z, 255, 255, 255);
-    }
-    */
     LinkedHashMap<String, Object> data = new LinkedHashMap<String, Object>();
     data.put("landnumber", num);
     data.put("level", this.level);
@@ -271,13 +267,6 @@ public class World{
     data.put("owner", owner);
     data.put("members", members);
     int spawnY = 128;
-    for(int y = 127; y > 0; y--){
-      if(this.level.getBlockIdAt(startX, y, startZ) == 0){
-        continue;
-      }
-      spawnY = y;
-      break;
-    }
     double spawnX = startX + 0.5;
     double spawnZ = startZ + 0.5;
     String spawnPoint = Double.toString(spawnX) + ":" + Integer.toString(spawnY + 1) + ":" + Double.toString(spawnZ);
@@ -332,26 +321,43 @@ public class World{
   }
 
 
+  public boolean isInsideLand(Land land, int x, int z){
+    if(land.startX <= x && land.startZ <= z && land.endX >= x && land.endZ >= z){
+      return true;
+    }
+    return false;
+  }
+
 
   public Land getLand(int num){
-    return this.lands.get(num);
+    if(this.lands.containsKey(num)){
+      return this.lands.get(num);
+    }
+    return null;
   }
   public Land getLand(Vector3 vec){
     return this.getLand((int)vec.x, (int)vec.z);
   }
-  public Land getLand(int x, int z){
+  protected Land getLandByRecent(int x, int z){
     Land land;
-    for(int num : this.recentGetLandByNum){
+    for(int num : this.recentLands){
       land = this.getLand(num);
       if(land != null){
-        if(land.startX <= x && land.startZ <= z && land.endX >= x && land.endZ >= z){
+        if(this.isInsideLand(land, x, z)){
           return land;
         }
       }
     }
+    return null;
+  }
+  public Land getLand(int x, int z){
+    Land land = this.getLandByRecent(x, z);
+    if(land != null){
+      return land;
+    }
     for(Land land2 : this.lands.values()){
-      if(land2.startX <= x && land2.startZ <= z && land2.endX >= x && land2.endZ >= z){
-        this.recentGetLandByNum.add(land2.getNumber());
+      if(this.isInsideLand(land2, x, z)){
+        this.recentLands.add(land2.getNumber());
         return land2;
       }
     }
@@ -359,17 +365,17 @@ public class World{
   }
   public Land getLand(int x, int z, String who){
     Land land;
-    if(this.recentGetLandByName.containsKey(who)){
-      land = this.getLand(this.recentGetLandByName.get(who));
+    if(this.recentLandsByName.containsKey(who)){
+      land = this.getLand(this.recentLandsByName.get(who));
       if(land != null){
-        if(land.startX <= x && land.startZ <= z && land.endX >= x && land.endZ >= z){
+        if(this.isInsideLand(land, x, z)){
           return land;
         }
       }
     }
     land = this.getLand(x, z);
     if(land != null){
-      this.recentGetLandByName.put(name, land.getNumber());
+      this.recentLandsByName.put(name, land.getNumber());
       return land;
     }
     return null;
@@ -382,20 +388,10 @@ public class World{
     Land land = this.lands.get(num);
     DataBase.removeLand(this, land);
 
-    /* Sucks! why this code is remain until now? */
-    /*for(int x = land.startX; x <= land.endX; x++)
-    for(int z = land.startZ; z <= land.endZ; z++){
-      int c = Biome.getBiome(this.level.getBiomeId(x, z)).getColor();
-      int r = c >> 16;
-      int g = (c >> 8) & 0xff;
-      int b = c & 0xff;
-      this.level.setBiomeColor(x, z, r, g, b);
-      Debug.normal("biome color");
-    }*/
-
     this.lands.remove(num);
     return true;
   }
+
   public boolean removeLand(Land land){
     return this.removeLand(land.getNumber());
   }

@@ -35,6 +35,7 @@ public class WorldUserInfo extends SubCommand{
       }
       sb.append(p.getName());
     }
+    Message.normal(player, sb.toString());
     return true;
   }
 }
