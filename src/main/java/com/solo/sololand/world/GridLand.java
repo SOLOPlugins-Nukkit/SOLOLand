@@ -53,12 +53,6 @@ public class GridLand extends World{
     /* Auto Land Make Code */
     int gridLandX = x % 36;
     int gridLandZ = z % 36;
-    if(gridLandX < 0){
-      gridLandX += 36;
-    }
-    if(gridLandZ < 0){
-      gridLandZ += 36;
-    }
     if(gridLandX >= 6 && gridLandZ >= 6){
       int startX = (int)(x / 36) * 36 + 6;
       int startZ = (int)(z / 36) * 36 + 6;
