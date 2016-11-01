@@ -1,11 +1,11 @@
 package com.solo.sololand.command;
 
 import cn.nukkit.Server;
-import cn.nukkit.command.simple.Command;
-import cn.nukkit.command.simple.CommandPermission;
+import cn.nukkit.command.PluginCommand;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
+import com.solo.sololand.Main;
 import com.solo.sololand.util.Page;
 import com.solo.sololand.util.Message;
 
@@ -27,7 +27,13 @@ public abstract class MainCommand extends BaseCommand{
 
   public MainCommand(String name, String description, String usage, String[] aliases){
     super(name, description, usage, aliases);
-     Server.getInstance().getCommandMap().registerSimpleCommands(this);
+    PluginCommand command = new PluginCommand(name, Main.getInstance());
+    command.setDescription(description);
+    command.setUsage(usage);
+    Server.getInstance().getCommandMap().register(name, command);
+    for(Player player : Server.getInstance().getOnlinePlayers().values()){
+      player.sendCommandData();
+    }
   }
 
   @Override

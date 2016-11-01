@@ -63,28 +63,6 @@ public class EventListener implements Listener{
     this.plugin = plugin;
   }
 
-  @EventHandler(
-    ignoreCancelled = false,
-    priority = EventPriority.MONITOR
-  )
-  public void onCmdPreprocess(PlayerCommandPreprocessEvent event){
-    if(event.getMessage().startsWith("/")){
-      if(Main.getInstance().getCommandMap().dispatch(event.getPlayer(), event.getMessage().substring(1))){
-        event.setCancelled();
-      }
-    }
-  }
-
-  @EventHandler(
-    ignoreCancelled = false,
-    priority = EventPriority.MONITOR
-  )
-  public void onServerCommand(ServerCommandEvent event){
-    if(Main.getInstance().getCommandMap().dispatch(event.getSender(), event.getCommand())){
-      event.setCancelled();
-    }
-  }
-
   @EventHandler
   public void onLevelInit(LevelInitEvent event){
     Debug.normal("LevelInitEvent 발생");

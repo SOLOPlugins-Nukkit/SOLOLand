@@ -55,6 +55,17 @@ public class Main extends PluginBase {
     DataBase.saveWorld();
   }
 
+  @Override
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
+    StringBuilder sb = new StringBuilder();
+    sb.append(command.getName());
+    for(String arg : args){
+      sb.append(" ");
+      sb.append(arg);
+    }
+    this.commandMap.dispatch(sender, sb.toString());
+    return true;
+  }
 
 
 
