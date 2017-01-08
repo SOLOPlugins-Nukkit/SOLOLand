@@ -1,8 +1,0 @@
-package com.solo.sololand.command;
-
-import java.util.LinkedHashMap;
-import java.util.HashMap;
-
-public class SubCommandMap extends BaseCommandMap{
-
-}
