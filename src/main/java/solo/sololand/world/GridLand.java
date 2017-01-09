@@ -68,8 +68,8 @@ public class GridLand extends World{
 				(gridLandZ == 0 && gridLandX >= 6) ||
 				(gridLandX == 0 && gridLandZ == 0)
 			){
-				int startX = (int)(x / 36) * 36 + 6;
-				int startZ = (int)(z / 36) * 36 + 6;
+				int startX = (int)(x / 37) * 37 + 6;
+				int startZ = (int)(z / 37) * 37 + 6;
 				Land createdLand = this.createLand(startX, startZ, startX + 31, startZ + 31);
 				this.setLand(createdLand);
 				return createdLand;
