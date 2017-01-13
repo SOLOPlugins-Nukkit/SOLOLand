@@ -18,8 +18,8 @@ public class ArrayUtil{
 			sb.append(a);
 		}
 		if(f){
-			return sb.toString();
+			return "";
 		}
-		return "";
+		return sb.toString();
 	}
 }
