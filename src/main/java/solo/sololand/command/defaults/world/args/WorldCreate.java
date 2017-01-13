@@ -3,13 +3,11 @@ package solo.sololand.command.defaults.world.args;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
-import cn.nukkit.level.generator.Normal;
-import cn.nukkit.level.generator.Flat;
 import cn.nukkit.level.generator.Generator;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.generator.*;
+import solo.sololand.external.ArrayUtil;
 import solo.sololand.external.Message;
 
 import java.io.File;
@@ -17,7 +15,7 @@ import java.io.File;
 public class WorldCreate extends SubCommand{
 
 	public WorldCreate(){
-		super("생성", "월드를 생성합니다. 제너레이터에는 야생, 평지, 섬, 스카이블럭, 평야, 빈월드, 스카이그리드 중 하나를 입력하세요.");
+		super("생성", "월드를 생성합니다. 제너레이터에는 " + ArrayUtil.implode(", ", Generator.getGeneratorList()) + " 중 하나를 입력하세요.");
 		this.setInGameOnly(false);
 		this.setPermission("sololand.command.world.create");
 		this.addCommandParameters(new CommandParameter[]{
@@ -28,7 +26,7 @@ public class WorldCreate extends SubCommand{
 
 	@Override
 	public boolean execute(CommandSender sender, String[] args){
-		if(args.length < 1){
+		if(args.length < 2){
 			return false;
 		}
 		args[0] = args[0].toLowerCase();
@@ -46,39 +44,22 @@ public class WorldCreate extends SubCommand{
 				return true;
 		}
 
-		Class<? extends Generator> generator = Normal.class;
-		if(args.length > 1){
-			switch(args[1]){
-				case "평지":
-					generator = Flat.class;
-					break;
-					
-				case "섬":
-					generator = IslandGenerator.class;
-					break;
-					
-				case "스카이블럭":
-					generator = SkyBlockGenerator.class;
-					break;
-					
-				case "평야":
-					generator = GridLandGenerator.class;
-					break;
-					
-				case "빈월드":
-					generator = EmptyWorldGenerator.class;
-					break;
-					
-				case "스카이그리드":
-					generator = SkyGridGenerator.class;
-					break;
+		// Cool. now all generator is available
+		Class<? extends Generator> generator = null;
+		for(String gen : Generator.getGeneratorList()){
+			if(args[1].toLowerCase().equals(gen)){
+				generator = Generator.getGenerator(gen);
 			}
+		}
+		if(generator == null){
+			return false;
 		}
 
 		File dir = new File(Server.getInstance().getDataPath() + File.separator + "worlds" + File.separator + args[0]);
 		dir.mkdir();
 
-		boolean isCreated = Server.getInstance().generateLevel(args[0], 404l, generator);
+		//seed is currentTimeMillis
+		boolean isCreated = Server.getInstance().generateLevel(args[0], System.currentTimeMillis(), generator);
 		if(!isCreated){
 			if(!Server.getInstance().loadLevel(args[0])){
 				Message.alert(sender, "알 수 없는 오류로 월드 생성에 실패하였습니다.");

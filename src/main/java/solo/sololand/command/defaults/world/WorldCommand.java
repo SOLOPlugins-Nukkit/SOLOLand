@@ -22,11 +22,12 @@ public class WorldCommand extends MainCommand{
 		this.registerSubCommand(new WorldSetSpawn());
 		this.registerSubCommand(new WorldProtect());
 		/*this.registerSubCommand(new WorldAllowBurn());*/
-		this.registerSubCommand(new WorldAllowCreateLand());
 		this.registerSubCommand(new WorldAllowExplosion());
 		this.registerSubCommand(new WorldAllowFight());
-		this.registerSubCommand(new WorldDefaultLandPrice());
 		this.registerSubCommand(new WorldInvenSave());
+		this.registerSubCommand(new WorldAllowCreateLand());
+		this.registerSubCommand(new WorldAllowResizeLand());
+		this.registerSubCommand(new WorldDefaultLandPrice());
 		this.registerSubCommand(new WorldMaxLandCount());
 		this.registerSubCommand(new WorldMaxLandLength());
 		this.registerSubCommand(new WorldMinLandLength());
