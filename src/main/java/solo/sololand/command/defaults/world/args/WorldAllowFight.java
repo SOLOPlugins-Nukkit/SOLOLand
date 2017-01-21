@@ -10,7 +10,7 @@ import solo.sololand.external.Message;
 public class WorldAllowFight extends SubCommand{
 
 	public WorldAllowFight(){
-		super("전투허용", "월드의 전투 허용 여부를 설정합니다.");
+		super("pvp허용", "월드의 전투 허용 여부를 설정합니다.");
 		this.setPermission("sololand.command.world.allowfight");
 	}
 

@@ -21,6 +21,7 @@ public class EmptyWorldGenerator extends Generator {
 
 	private ChunkManager level;
 	private final Map<String, Object> options;
+	
 	@Override
 	public ChunkManager getChunkManager() {
 		return level;
@@ -43,7 +44,6 @@ public class EmptyWorldGenerator extends Generator {
 	public EmptyWorldGenerator(Map<String, Object> options){
 		this.options = options;
 	}
-
 
 	@Override
 	public void init(ChunkManager level, NukkitRandom random) {

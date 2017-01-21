@@ -1,10 +1,3 @@
-/*
-
-
-### NOT COMPLETE YET ###
-
-
-
 package solo.sololand.command.defaults.land.args;
 
 
@@ -15,6 +8,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
+import solo.sololand.land.Room;
 import solo.sololand.world.World;
 import solo.sololand.external.Message;
 import solo.sololand.queue.Queue;
@@ -34,7 +28,9 @@ public class LandCombine extends SubCommand{
 	public boolean execute(CommandSender sender, String[] args){
 		Player player = (Player) sender;
 		World world = World.get(player);
-		Land land = world.getLand(player);
+		Land land;
+		Land targetLand;
+		Land afterLand;
 
 		if(!player.isOp() && !world.isAllowCombineLand()){
 			Message.alert(player, "해당 월드에서 땅을 합칠 수 없습니다.");
@@ -44,125 +40,159 @@ public class LandCombine extends SubCommand{
 		StringBuilder sb;
 		boolean f;
 
-		switch(Queue.get(player)){
-			case Queue.NULL:
-				if(land == null){
-					Message.alert(player, "현재 위치에서 땅을 찾을 수 없습니다.");
-					return true;
-				}
-				if(!player.isOp() && !land.isOwner(player)){
-					Message.alert(player, "땅 주인이 아니므로 땅을 합칠 수 없습니다.");
-					return true;
-				}
-				int num;
-				try{
-					num = Integer.parseInt(args[0]);
-				}catch(Exception e){
-					return false;
-				}
-				Land targetLand = world.getLand(num);
-				if(targetLand == null){
-					Message.alert(player, "해당 번호의 땅은 존재하지 않습니다.");
-					return true;
-				}
-				if(!player.isOp() && !targetLand.isOwner(player)){
-					Message.alert(player, Integer.toString(targetLand.getNumber()) + "번 땅 주인이 아니므로 땅을 합칠 수 없습니다.");
-					return true;
-				}
-				
-				Land afterLand = land.clone();
-				afterLand.expand(targetLand);
-				ArrayList<Land> overlapList = world.getOverlap(afterLand);
-				ArrayList<Land> notOwned = new ArrayList<Land>();
-				sb = new StringBuilder();
-				f = true;
-				for(Land overlap : overlapList){
-					//if overlap land is not your land
-					if(! overlap.isOwner(player)){
-						notOwned.add(overlap);
-					}
-					if(f){
-						f = false;
-					}else{
-						sb.append(", ");
-					}
-					sb.append(Integer.toString(overlap.getNumber()) + "번");
-				}
-				Message.normal(player, "총 " + Integer.toString(overlapList.size()) + "개의 겹치는 땅이 발견되었습니다 : " + sb.toString());
-
-				if(notOwned.size() > 0){
-					sb = new StringBuilder();
-					f = true;
-					for(Land not : notOwned){
-						if(f){
-							f = false;
-						}else{
-							sb.append(", ");
-						}
-						sb.append(Integer.toString(not.getNumber()) + "번");
-					}
-					Message.alert(player, "겹치는 땅 중에 소유하지 않은 땅이 있어, 땅을 합칠 수 없습니다 : " + sb.toString());
-					return true;
-				}
-				
-				double myMoney = Economy.getMoney(player);
-				double price = world.getPricePerBlock() * (afterLand.size() - )
-				Queue.set(player, Queue.LAND_COMBINE);
-				Queue.setLand(player, land);
-				Queue.setTemporaryLand(player, afterLand);
-				Message.normal(player, "땅 확장을 시작합니다. 크기를 확장할 지점을 터치해주세요.");
+		if(Queue.get(player) == Queue.LAND_COMBINE){
+			land = Queue.getLand(player);
+			if(!player.isOp() && !land.isOwner(player)){
+				Message.alert(player, "땅 주인이 아니므로 땅을 합칠 수 없습니다.");
 				return true;
-
-			case Queue.LAND_COMBINE:
-				try{
-					Land afterLand = Queue.getTemporaryLand(player);
-					Land beforeLand = Queue.getLand(player);
-					if(!player.isOp() && !beforeLand.isOwner(player)){
-						Message.alert(player, "땅 주인이 아니므로 땅 크기변경을 할 수 없습니다.");
-						return true;
-					}
-					ArrayList<Land> overlapList = world.getOverlap(afterLand);
-					if(overlapList.size() > 0){
-						StringBuilder sb = new StringBuilder();
-						boolean f = true;
-						for(Land overlap : overlapList){
-							if(f){
-								f = false;
-							}else{
-								sb.append(", ");
-							}
-							sb.append(Integer.toString(overlap.getNumber()) + "번");
-						}
-						Message.alert(player, sb.toString() + " 땅과 겹칩니다. 땅 확장을 취소합니다.");
-						Queue.clean(player);
-						break;
-					}
-					if(beforeLand.size() >= afterLand.size()){
-						Message.alert(player, "땅 크기에 변동이 없어 땅 확장을 중지합니다.");
-						return true;
-					}
-					if(!player.isOp()){
-						double myMoney = Economy.getMoney(player);
-						double price = world.getPricePerBlock() * (afterLand.size() - beforeLand.size());
-						if(myMoney < price){
-							Message.alert(player, "돈이 부족합니다. 현재 소지한 돈 : " + Double.toString(myMoney) + "원, 땅 확장 시 필요한 돈 : " + Double.toString(price) + "원");
-							Queue.clean(player);
-							return true;
-						}
-						Economy.reduceMoney(player, price);
-					}
-					world.setLand(beforeLand.getNumber(), afterLand);
-					Message.success(player, "성공적으로 땅를 확장하였습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - beforeLand.size()) + "블럭");
-					Queue.clean(player);
-				}catch(Exception e){
-					Message.alert(player, "땅 확장중 오류가 발생하였습니다. 땅 확장 작업을 다시 시도해주세요.");
-					Queue.clean(player);
-				}
+			}
+			afterLand = Queue.getTemporaryLand(player);
+		}else if(Queue.get(player) == Queue.NULL){
+			land = world.getLand(player);
+			if(land == null){
+				Message.alert(player, "현재 위치에서 땅을 찾을 수 없습니다.");
 				return true;
-
-			default:
-				Message.alert(player, "현재 다른 작업이 진행중입니다. /땅 취소 명령어를 입력한 뒤 시도해주세요.");
+			}
+			if(!player.isOp() && !land.isOwner(player)){
+				Message.alert(player, "땅 주인이 아니므로 땅을 합칠 수 없습니다.");
+				return true;
+			}
+			int num;
+			try{
+				num = Integer.parseInt(args[0]);
+			}catch(Exception e){
+				return false;
+			}
+			targetLand = world.getLand(num);
+			if(targetLand == null){
+				Message.alert(player, "해당 번호의 땅은 존재하지 않습니다.");
+				return true;
+			}
+			if(!player.isOp() && !targetLand.isOwner(player)){
+				Message.alert(player, Integer.toString(targetLand.getNumber()) + "번 땅 주인이 아니므로 땅을 합칠 수 없습니다.");
+				return true;
+			}
+			if(land.getNumber() == targetLand.getNumber()){
+				Message.alert(player, "같은 땅끼리 서로 합칠 수 없습니다.");
+				return true;
+			}
+			afterLand = land.clone();
+			afterLand.expand(targetLand);
+		}else{
+			Message.alert(player, "현재 다른 작업이 진행중입니다. /땅 취소 명령어를 입력한 뒤 다시 시도해주세요.");
+			return true;
 		}
+		
+		ArrayList<Land> overlapList = world.getOverlap(afterLand);
+		ArrayList<Land> cantCombine = new ArrayList<Land>();
+		ArrayList<Land> notOwned = new ArrayList<Land>();
+		ArrayList<Room> overlapRoomList = new ArrayList<Room>();
+		sb = new StringBuilder();
+		f = true;
+		for(Land overlap : overlapList){
+			//if overlap land is not your land
+			if(! overlap.isOwner(player)){
+				notOwned.add(overlap);
+			}
+			if(! afterLand.isInside(overlap)){
+				cantCombine.add(overlap);
+			}
+			if(overlap.hasRoom()){
+				overlapRoomList.addAll(overlap.getRooms().values());
+			}
+			if(f){
+				f = false;
+			}else{
+				sb.append(", ");
+			}
+			sb.append(Integer.toString(overlap.getNumber()) + "번");
+		}
+		Message.normal(player, "총 " + Integer.toString(overlapList.size()) + "개의 겹치는 땅이 발견되었습니다 : " + sb.toString());
+
+		boolean canCombine = true;
+				
+		if(! player.isOp() && notOwned.size() > 0){
+			canCombine = false;
+			sb = new StringBuilder();
+			f = true;
+			for(Land not : notOwned){
+				if(f){
+					f = false;
+				}else{
+					sb.append(", ");
+				}
+				sb.append(Integer.toString(not.getNumber()) + "번 (" + not.getOwner() + ")");
+			}
+			Message.alert(player, "겹치는 땅 중에 소유하지 않은 땅이 있어, 땅을 합칠 수 없습니다 : " + sb.toString());
+		}
+		
+		if(cantCombine.size() > 0){
+			canCombine = false;
+			sb = new StringBuilder();
+			f = true;
+			for(Land not : cantCombine){
+				if(f){
+					f = false;
+				}else{
+					sb.append(", ");
+				}
+				sb.append(Integer.toString(not.getNumber()) + "번 ");
+			}
+			Message.alert(player, "완전히 겹쳐져 있지 않은 땅은 합칠 수 없습니다 : " + sb.toString());
+		}
+		
+		if(! canCombine){
+			return true;
+		}
+		
+		if(Queue.get(player) == Queue.NULL && overlapRoomList.size() > 0){
+			sb = new StringBuilder();
+			f = true;
+			for(Room room : overlapRoomList){
+				if(f){
+					f = false;
+				}else{
+					sb.append(", ");
+				}
+				sb.append(room.getAddress() + "번");
+			}
+			Message.normal(player, "땅을 합칠 시 " + sb.toString() + "방도 함께 합쳐집니다.");
+		}
+		
+		if(! player.isOp()){
+			double myMoney = Economy.getMoney(player);
+			double price = world.getPricePerBlock() * (afterLand.size() - land.size());
+			Message.normal(player, "현재 소지한 돈 : " + Double.toString(myMoney) + "원, 땅을 합칠 시 필요한 돈 : " + Double.toString(price) + "원");
+			if(myMoney < price){
+				Message.alert(player, "돈이 부족하여 땅을 합칠 수 없습니다.");
+				return true;
+			}
+			if(Queue.get(player) == Queue.LAND_COMBINE){
+				Economy.reduceMoney(player, price);
+			}
+		}
+		if(Queue.get(player) == Queue.NULL){
+			Queue.set(player, Queue.LAND_COMBINE);
+			Queue.setLand(player, land);
+			Queue.setTemporaryLand(player, afterLand);
+			Message.normal(player, "땅 합치기를 진행하려면 /땅 합치기 명령어를 한번 더 입력해주세요.");
+			return true;
+		}
+		
+		for(Room room : overlapRoomList){
+			room.land = afterLand;
+			room.number = afterLand.getNextRoomNumber();
+			afterLand.setRoom(room);
+		}
+		for(Land overlap : overlapList){
+			world.removeLand(overlap);
+		}
+		world.setLand(land.getNumber(), afterLand);
+		Message.success(player, "성공적으로 땅를 확장하였습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - land.size()) + "블럭");
+		if(overlapRoomList.size() > 0){
+			Message.success(player, "합쳐진 방 갯수 : " + Integer.toString(overlapRoomList.size()) + "개");
+		}
+		Queue.clean(player);
 		return true;
 	}
-}*/
+}

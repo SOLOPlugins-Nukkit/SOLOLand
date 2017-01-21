@@ -21,7 +21,7 @@ import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityExplosionPrimeEvent;
-
+import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.level.particle.Particle;
 import cn.nukkit.level.Location;
@@ -140,7 +140,7 @@ public class EventListener implements Listener{
 			Room room = land.getRoom(event.getTo());
 			Room currentRoom = this.currentRoomList.get(name);
 			if(room != null){
-				if(currentRoom == null && currentRoom != room){
+				if(currentRoom == null || currentRoom != room){
 					
 					//room welcomeMessage part
 					String welcomeRoomMessage = "[" + Integer.toString(room.getNumber()) + "번 방] ";
@@ -184,7 +184,7 @@ public class EventListener implements Listener{
 			
 			
 			
-			if(currentLand == null && currentLand != land){
+			if(currentLand == null || currentLand != land){
 			
 				//welcomeMessage part
 				String welcomeMessage = "[" + Integer.toString(land.getNumber()) + "번 땅] ";
@@ -273,15 +273,22 @@ public class EventListener implements Listener{
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onQuit(PlayerQuitEvent event){
 		Queue.clean(event.getPlayer());
+		
+		String name = event.getPlayer().getName().toLowerCase();
+		this.movePos.remove(name);
+		this.currentLandList.remove(name);
+		this.currentRoomList.remove(name);
+		this.lastPick.remove(name);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
-	public void onTeleport(PlayerTeleportEvent event){
-		if(! event.getFrom().getLevel().getFolderName().equals(event.getTo().getLevel().getFolderName())){
-			if(Queue.get(event.getPlayer()) != Queue.NULL){
-				Message.alert(event.getPlayer(), "다른 월드로 이동하여, 진행중이던 작업이 취소되었습니다.");
+	public void onTeleport(EntityLevelChangeEvent event){
+		if(event.getEntity() instanceof Player){
+			Player player = (Player) event.getEntity();
+			if(Queue.get(player) != Queue.NULL){
+				Message.alert(player, "다른 월드로 이동하여, 진행중이던 작업이 취소되었습니다.");
 			}
-			Queue.clean(event.getPlayer());
+			Queue.clean(player);
 		}
 	}
 

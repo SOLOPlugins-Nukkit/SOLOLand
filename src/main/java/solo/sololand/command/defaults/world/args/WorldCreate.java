@@ -47,7 +47,7 @@ public class WorldCreate extends SubCommand{
 		// Cool. now all generator is available
 		Class<? extends Generator> generator = null;
 		for(String gen : Generator.getGeneratorList()){
-			if(args[1].toLowerCase().equals(gen)){
+			if(args[1].toLowerCase().equals(gen.toLowerCase())){
 				generator = Generator.getGenerator(gen);
 			}
 		}

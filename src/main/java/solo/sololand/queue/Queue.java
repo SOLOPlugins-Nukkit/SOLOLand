@@ -28,7 +28,7 @@ public class Queue{
 	
 	public static final int LAND_SELL = 9;
 	
-	//public static final int LAND_COMBINE = 10;
+	public static final int LAND_COMBINE = 10;
 	
 	public static final int ROOM_CREATE_FIRST = 20;
 	public static final int ROOM_CREATE_SECOND = 21;

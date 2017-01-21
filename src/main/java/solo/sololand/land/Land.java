@@ -183,6 +183,15 @@ public class Land{
 		);
 	}
 	
+	public boolean isInside(Land land){
+		return (
+			this.start.x  <= land.start.x &&
+			this.start.y <= land.start.y &&
+			this.end.x >= land.end.x &&
+			this.end.y >= land.end.y
+		);
+	}
+	
 	public boolean isOverlap(Land land){
 		return !(
 			land.start.x > this.end.x ||
@@ -361,7 +370,7 @@ public class Land{
 	
 	public void expand(Land land){
 		this.start = new Vector2(Math.min(this.start.x, land.start.x), Math.min(this.start.y, land.start.y));
-		this.end = new Vector2(Math.min(this.end.x, land.start.x), Math.min(this.end.y, land.end.y));
+		this.end = new Vector2(Math.max(this.end.x, land.end.x), Math.max(this.end.y, land.end.y));
 	}
 	
 	public void reduce(Vector3 vec){

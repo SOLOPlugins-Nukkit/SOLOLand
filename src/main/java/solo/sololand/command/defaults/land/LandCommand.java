@@ -31,6 +31,7 @@ public class LandCommand extends MainCommand{
 		this.registerSubCommand(new LandGive());
 		this.registerSubCommand(new LandExpand());
 		this.registerSubCommand(new LandReduce());
+		//this.registerSubCommand(new LandCombine());
 		this.registerSubCommand(new LandShareList());
 		this.registerSubCommand(new LandVisitor());
 		this.registerSubCommand(new LandCancel());

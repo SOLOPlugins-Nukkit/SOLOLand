@@ -51,14 +51,14 @@ public class Main extends PluginBase {
 		}
 		this.getDataFolder().mkdirs();
 		
-		this.initialSetting();
+		this.initialSetting(); //THIS IS VERY FIRST
 		this.initialGenerators();
 	}
 
 	@Override
 	public void onEnable(){
-		this.initialEvents();
 		this.initialWorlds();
+		this.initialEvents();
 		this.initialCommands();
 		this.initialTasks();
 	}
