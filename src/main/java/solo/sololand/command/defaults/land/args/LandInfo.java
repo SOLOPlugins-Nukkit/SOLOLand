@@ -42,9 +42,11 @@ public class LandInfo extends SubCommand{
 		}
 		information.add("땅 크기 : " + Integer.toString(land.xLength()) + "×" + Integer.toString(land.zLength()));
 		
+		StringBuilder sb;
+		
 		List<String> members = land.getMembers();
 		if(members.size() > 1){
-			StringBuilder sb = new StringBuilder();
+			sb = new StringBuilder();
 			for(int i = 0; i < members.size(); i++){
 				if(land.isOwner(members.get(i))){
 					continue;
@@ -59,8 +61,17 @@ public class LandInfo extends SubCommand{
 		if(!land.getWelcomeMessage().equals("")){
 			information.add("땅 환영말 : " + land.getWelcomeMessage());
 		}
+		sb = new StringBuilder();
+		sb.append((land.isAllowAccess()) ? "§a(접근)  " : "§c(접근)  ");
+		sb.append((land.isAllowFight()) ? "§a(PVP)  " : "§c(PVP)  ");
+		sb.append((land.isAllowPickUpItem()) ? "§a(아이템줍기)  " : "§c(아이템줍기)  ");
+		sb.append((land.isAllowDoor()) ? "§a(문)  " : "§c(문)");
+		sb.append((land.isAllowChest()) ? "§a(상자)  " : "§c(상자)  ");
+		//sb.append((land.isAllowCraft()) ? "§a(조합대)" : "§c(조합대)");
+		information.add("땅 설정 정보 : " + sb.toString());
+		
 		if(land.hasRoom()){
-			StringBuilder sb = new StringBuilder();
+			sb = new StringBuilder();
 			boolean f = true;
 			for(Room room : land.getRooms().values()){
 				if(f){

@@ -23,6 +23,9 @@ public class LandCommand extends MainCommand{
 		this.registerSubCommand(new LandAccess());
 		this.registerSubCommand(new LandAllowFight());
 		this.registerSubCommand(new LandAllowPickUpItem());
+		this.registerSubCommand(new LandAllowDoor());
+		this.registerSubCommand(new LandAllowChest());
+		//this.registerSubCommand(new LandAllowCraft());
 		this.registerSubCommand(new LandBuy());
 		this.registerSubCommand(new LandSell());
 		this.registerSubCommand(new LandSellList());
@@ -31,7 +34,7 @@ public class LandCommand extends MainCommand{
 		this.registerSubCommand(new LandGive());
 		this.registerSubCommand(new LandExpand());
 		this.registerSubCommand(new LandReduce());
-		//this.registerSubCommand(new LandCombine());
+		this.registerSubCommand(new LandCombine());
 		this.registerSubCommand(new LandShareList());
 		this.registerSubCommand(new LandVisitor());
 		this.registerSubCommand(new LandCancel());

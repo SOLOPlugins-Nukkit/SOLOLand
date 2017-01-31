@@ -47,6 +47,7 @@ public class LandCombine extends SubCommand{
 				return true;
 			}
 			afterLand = Queue.getTemporaryLand(player);
+			
 		}else if(Queue.get(player) == Queue.NULL){
 			land = world.getLand(player);
 			if(land == null){
@@ -78,6 +79,24 @@ public class LandCombine extends SubCommand{
 			}
 			afterLand = land.clone();
 			afterLand.expand(targetLand);
+			
+			Message.normal(player, "합칠 시 땅 크기 : " + afterLand.xLength() + "x" + afterLand.zLength() + " (" + afterLand.size() + "블럭)");
+			if(
+				world.getMinLandLength() > afterLand.xLength() ||
+				world.getMinLandLength() > afterLand.zLength()
+			){
+				Message.alert(player, "땅의 한변 길이는 최소 " + Integer.toString(world.getMinLandLength()) + "블럭 이어야 합니다. 땅 생성을 취소합니다.");
+				Queue.clean(player);
+				return true;
+			}
+			if(
+				world.getMaxLandLength() < afterLand.xLength() ||
+				world.getMaxLandLength() < afterLand.zLength()
+			){
+				Message.alert(player, "땅의 한변 길이는 " + Integer.toString(world.getMaxLandLength()) + "블럭을 넘을 수 없습니다. 땅 합치기를 취소합니다.");
+				Queue.clean(player);
+				return true;
+			}
 		}else{
 			Message.alert(player, "현재 다른 작업이 진행중입니다. /땅 취소 명령어를 입력한 뒤 다시 시도해주세요.");
 			return true;
@@ -188,7 +207,7 @@ public class LandCombine extends SubCommand{
 			world.removeLand(overlap);
 		}
 		world.setLand(land.getNumber(), afterLand);
-		Message.success(player, "성공적으로 땅를 확장하였습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - land.size()) + "블럭");
+		Message.success(player, "성공적으로 땅를 합쳤습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - land.size()) + "블럭");
 		if(overlapRoomList.size() > 0){
 			Message.success(player, "합쳐진 방 갯수 : " + Integer.toString(overlapRoomList.size()) + "개");
 		}

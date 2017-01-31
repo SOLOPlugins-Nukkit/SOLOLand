@@ -24,6 +24,9 @@ public class WorldCommand extends MainCommand{
 		/*this.registerSubCommand(new WorldAllowBurn());*/
 		this.registerSubCommand(new WorldAllowExplosion());
 		this.registerSubCommand(new WorldAllowFight());
+		this.registerSubCommand(new WorldAllowDoor());
+		this.registerSubCommand(new WorldAllowChest());
+		//this.registerSubCommand(new WorldAllowCraft());
 		this.registerSubCommand(new WorldInvenSave());
 		this.registerSubCommand(new WorldAllowCreateLand());
 		this.registerSubCommand(new WorldAllowResizeLand());

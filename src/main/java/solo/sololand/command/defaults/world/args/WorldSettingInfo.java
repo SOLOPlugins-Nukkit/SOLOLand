@@ -26,12 +26,16 @@ public class WorldSettingInfo extends SubCommand{
 		sb.append(world.isProtected() ? "§a(보호)  " : "§7(보호)  ");
 		sb.append(world.isInvenSave() ? "§a(인벤세이브)  " : "§7(인벤세이브)  ");
 		sb.append(world.isAllowFight() ? "§a(PVP)  " : "§7(PVP)  ");
-		sb.append(world.isAllowExplosion() ? "§a(TNT 블럭 파괴)" : "§7(TNT 블럭 파괴)");
+		sb.append(world.isAllowExplosion() ? "§a(TNT 블럭 파괴)  " : "§7(TNT 블럭 파괴)  ");
+		sb.append(world.isAllowDoor() ? "§a(문)  " : "§7(문)  ");
+		sb.append(world.isAllowChest() ? "§a(상자)  " : "§7(상자)  ");
+		//sb.append(world.isAllowCraft() ? "§a(조합대)" : "§7(조합대)");
 		information.add("월드 설정 : " + sb.toString());
 
 		sb = new StringBuilder();
 		sb.append(world.isAllowCreateLand() ? "§a(땅 생성 허용)  " : "§7(땅 생성 허용)  ");
 		sb.append(world.isAllowResizeLand() ? "§a(땅 확장/축소 허용)  " : "§7(땅 확장/축소 허용)  ");
+		sb.append(world.isAllowCombineLand() ? "§a(땅 합치기 허용)  " : "§7(땅 합치기 허용)");
 		sb.append("§a(기본 땅 가격 : " + Double.toString(world.getDefaultLandPrice()) + ")  ");
 		sb.append("§a(블럭당 가격 : " + Double.toString(world.getPricePerBlock()) + ")  ");
 		sb.append("§a(최대 땅 갯수 : " + Integer.toString(world.getMaxLandCount()) + ")  ");

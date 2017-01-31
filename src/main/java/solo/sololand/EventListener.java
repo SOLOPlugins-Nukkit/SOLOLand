@@ -3,6 +3,10 @@ package solo.sololand;
 import cn.nukkit.Server;
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockChest;
+import cn.nukkit.block.BlockDoor;
+import cn.nukkit.block.BlockEnderChest;
+import cn.nukkit.block.BlockWorkbench;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventHandler;
@@ -13,7 +17,6 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockBurnEvent;
 import cn.nukkit.event.player.PlayerLoginEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
-import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.event.player.PlayerDeathEvent;
@@ -29,6 +32,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.GenericParticle;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -48,10 +52,10 @@ import solo.sololand.external.Debug;
 
 public class EventListener implements Listener{
 
-	private HashMap<String, Position> movePos = new HashMap<String, Position>();
-	private HashMap<String, Land> currentLandList = new HashMap<String, Land>();
-	private HashMap<String, Room> currentRoomList = new HashMap<String, Room>();
-	private HashMap<String, Long> lastPick = new HashMap<String, Long>();
+	private Map<String, Position> movePos = new HashMap<String, Position>();
+	private Map<String, Land> currentLandList = new HashMap<String, Land>();
+	private Map<String, Room> currentRoomList = new HashMap<String, Room>();
+	private Map<String, Long> lastPick = new HashMap<String, Long>();
 
 	@EventHandler
 	public void onLevelInit(LevelInitEvent event){
@@ -282,13 +286,19 @@ public class EventListener implements Listener{
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
-	public void onTeleport(EntityLevelChangeEvent event){
+	public void onLevelChange(EntityLevelChangeEvent event){
 		if(event.getEntity() instanceof Player){
 			Player player = (Player) event.getEntity();
 			if(Queue.get(player) != Queue.NULL){
 				Message.alert(player, "다른 월드로 이동하여, 진행중이던 작업이 취소되었습니다.");
 			}
 			Queue.clean(player);
+			
+			//String name = player.getName().toLowerCase();
+			//this.movePos.remove(name);
+			//this.currentLandList.remove(name);
+			//this.currentRoomList.remove(name);
+			//this.lastPick.remove(name);
 		}
 	}
 
@@ -317,14 +327,13 @@ public class EventListener implements Listener{
 			){
 				World world = World.get(ev.getEntity().getLevel());
 				Player player = (Player) ev.getEntity();
-				Land land = world.getLand(player.getFloorX(), player.getFloorZ(), player.getName());
+				Land land = world.getLand(player.getFloorX(), player.getFloorZ());
 
-				if(land != null && land.isAllowFight()){
-					return;
-				}else if(world.isAllowFight()){
-					return;
+				if(land != null && !land.isAllowFight()){
+					event.setCancelled();
+				}else if(! world.isAllowFight()){
+					event.setCancelled();
 				}
-				event.setCancelled();
 			}
 		}
 	}
@@ -344,8 +353,22 @@ public class EventListener implements Listener{
 			return;
 		}
 		World world = World.get(block.getLevel());
-		Land land = world.getLand(block.getFloorX(), block.getFloorZ(), player.getName());
+		Land land = world.getLand(block.getFloorX(), block.getFloorZ());
 		if(land != null){
+			
+			//check if land allow stuff such as door, chest, workbench
+			if(event instanceof PlayerInteractEvent){
+				PlayerInteractEvent ev = (PlayerInteractEvent) event;
+				if(land.isAllowChest() && (ev.getBlock() instanceof BlockChest || ev.getBlock() instanceof BlockEnderChest)){
+					return;
+				}else if(land.isAllowDoor() && ev.getBlock() instanceof BlockDoor){
+					return;
+				}//else if(land.isAllowCraft() && ev.getBlock() instanceof BlockWorkbench){
+				//	return;
+				//}
+			}
+			
+			//check room
 			if(land.hasRoom()){
 				Room room = land.getRoom(block);
 				if(room != null){
@@ -363,13 +386,26 @@ public class EventListener implements Listener{
 				}
 			}
 			if(!land.isOwner(player) && !land.isMember(player)){
-				Message.alert(player, "이 땅을 수정할 수 없습니다", Message.TYPE_POPUP);
+				if(! (event instanceof PlayerInteractEvent)){
+					Message.alert(player, "이 땅을 수정할 수 없습니다", Message.TYPE_POPUP);
+				}
 				event.setCancelled();
 			}else if(land.isSail()){
 				Message.alert(player, "땅이 매물에 등록되어 있는 동안엔 땅을 수정할 수 없습니다", Message.TYPE_POPUP);
 				event.setCancelled();
 			}
 			return;
+		}
+		//check if world allow stuff such as door, chest, workbench
+		if(event instanceof PlayerInteractEvent){
+			PlayerInteractEvent ev = (PlayerInteractEvent) event;
+			if(world.isAllowChest() && (ev.getBlock() instanceof BlockChest || ev.getBlock() instanceof BlockEnderChest)){
+				return;
+			}else if(world.isAllowDoor() && ev.getBlock() instanceof BlockDoor){
+				return;
+			}//else if(world.isAllowCraft() && ev.getBlock() instanceof BlockWorkbench){
+			//	return;
+			//}
 		}
 		if(world.isProtected()){
 			event.setCancelled();
