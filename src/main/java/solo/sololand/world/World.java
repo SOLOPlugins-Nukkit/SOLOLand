@@ -8,8 +8,8 @@ import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Config;
 
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.io.File;
 import java.util.ArrayList;
@@ -43,8 +43,7 @@ public class World{
 	public CustomWorldCommand command;
 	
 	//temporary
-	public HashSet<Integer> recentLands = new HashSet<Integer>();
-	public HashMap<String, Integer> recentLandsByName = new HashMap<String, Integer>();
+	public HashMap<String, HashSet<Integer>> recentLands = new HashMap<String, HashSet<Integer>>();
 	public int lastRemember = 1;
 
 	@SuppressWarnings("deprecation")
@@ -161,6 +160,11 @@ public class World{
 	public static LinkedHashMap<String, World> getAll() {
 		return World.worlds;
 	}
+	
+	
+	
+	
+	
 
 	public Level getLevel() {
 		return this.level;
@@ -186,6 +190,9 @@ public class World{
 			put("allowexplosion", false);
 			put("allowburn", false);
 			put("allowfight", false);
+			put("allowdoor", true);
+			put("allowchest", false);
+			put("allowcraft", true);
 			
 			//land setting
 			put("allowcreateland", false);
@@ -262,6 +269,27 @@ public class World{
 	}
 	public void setAllowFight(boolean bool) {
 		this.properties.put("allowfight", bool);
+	}
+	
+	public boolean isAllowDoor(){
+		return (boolean) this.properties.get("allowdoor");
+	}
+	public void setAllowDoor(boolean bool){
+		this.properties.put("allowdoor", bool);
+	}
+	
+	public boolean isAllowChest(){
+		return (boolean) this.properties.get("allowdoor");
+	}
+	public void setAllowChest(boolean bool){
+		this.properties.put("allowchest", bool);
+	}
+	
+	public boolean isAllowCraft(){
+		return (boolean) this.properties.get("allowcraft");
+	}
+	public void setAllowCraft(boolean bool){
+		this.properties.put("allowcraft", bool);
 	}
 
 	
@@ -360,8 +388,6 @@ public class World{
 	public void setMaxRoomLength(int length){
 		this.properties.put("maxroomlength", length);
 	}
-	
-	
 	
 	
 
@@ -496,45 +522,28 @@ public class World{
 		}
 		for(Land check : this.lands.values()){
 			if(check.isInside(x, z)){
-				this.recentLands.add(check.getNumber());
+				String chunkHash = Integer.toString(x >> 4) + ":" + Integer.toString(z >> 4);
+				if(! this.recentLands.containsKey(chunkHash)){
+					this.recentLands.put(chunkHash, new HashSet<Integer>());
+				}
+				this.recentLands.get(chunkHash).add(check.getNumber());
 				return check;
 			}
 		}
 		return null;
 	}
 	
-	protected Land getLandByRecent(int x, int z){
+	protected final Land getLandByRecent(int x, int z){
 		Land land;
-		for(int num : this.recentLands){
-			land = this.getLand(num);
-			if(land != null){
-				if(land.isInside(x, z)){
+		String chunkHash = Integer.toString(x >> 4) + ":" + Integer.toString(z >> 4);
+		if(this.recentLands.containsKey(chunkHash)){
+			for(int num : this.recentLands.get(chunkHash)){
+				land = this.getLand(num);
+				if(land != null && land.isInside(x, z)){
 					return land;
 				}
 			}
 		}
-		return null;
-	}
-	
-	public Land getLand(int x, int z, String who){
-		Land land;
-		if(this.recentLandsByName.containsKey(who)){
-			land = this.getLand(this.recentLandsByName.get(who));
-			if(land != null){
-				if(land.isInside(x, z)){
-					return land;
-				}
-			}
-		}
-		land = this.getLand(x, z);
-		if(land != null){
-			this.recentLandsByName.put(name, land.getNumber());
-			return land;
-		}
-		return null;
-	}
-	
-	public Land customGetLand(int x, int z){
 		return null;
 	}
 
@@ -583,12 +592,14 @@ public class World{
 		
 		//save lands
 		Debug.normal(Main.getInstance(), this.getName() + " 월드 땅 저장중...");
+		HashSet<Integer> recents = new HashSet<Integer>();
+		for(HashSet<Integer> set : this.recentLands.values()){
+			recents.addAll(set);
+		}
 		int count = 0;
 		for(Land land : this.lands.values()){
-			if(!all && !this.recentLands.contains(land.getNumber())){
+			if(!all && !recents.contains(land.getNumber())){
 				continue;
-			}else{
-				this.recentLands.remove(land.getNumber());
 			}
 			LinkedHashMap<String, Object> data = new LinkedHashMap<String, Object>();
 			data.put("landnumber", land.getNumber());
@@ -600,14 +611,18 @@ public class World{
 			data.put("startz", land.start.getFloorY());
 			data.put("endz", land.end.getFloorY());
 			
-			data.put("issail", land.isSail);
+			data.put("issail", land.sail);
 			data.put("price", land.price);
 			
 			data.put("spawnpoint", Double.toString(land.spawnPoint.x) + ":" + Double.toString(land.spawnPoint.y) + ":" + Double.toString(land.spawnPoint.z));
 			
-			data.put("isallowfight", land.isAllowFight);
-			data.put("isallowaccess", land.isAllowAccess);
-			data.put("isallowpickupitem", land.isAllowPickUpItem);
+			data.put("isallowfight", land.allowFight);
+			data.put("isallowaccess", land.allowAccess);
+			data.put("isallowpickupitem", land.allowPickUpItem);
+			
+			data.put("isallowdoor", land.allowDoor);
+			data.put("isallowchest", land.allowChest);
+			data.put("isallowcraft", land.allowCraft);
 			
 			data.put("welcomemessage", land.welcomeMessage);
 			data.put("welcomeparticle", land.welcomeParticle);
@@ -641,6 +656,7 @@ public class World{
 			conf.save();
 			++count;
 		}
+		this.recentLands.clear();
 		Debug.normal(Main.getInstance(), this.getName() + " 월드 땅 저장완료 (저장된 땅 갯수 : " + Integer.toString(count) + "개)");
 	}
 

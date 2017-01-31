@@ -2,7 +2,12 @@ package solo.sololand.util;
 
 import java.util.ArrayList;
 
-public abstract class Sphere {
+public class Sphere {
+	
+	private Sphere(){
+		
+	}
+	
 	public static ArrayList<int[]> getElements(int centerX, int centerY, int centerZ, int radius){
 		int minX = centerX - radius;
 		int maxX = centerX + radius;

@@ -5,6 +5,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
+import solo.sololand.util.DefaultValue;
 import solo.sololand.world.World;
 
 import java.util.Map;
@@ -24,13 +25,17 @@ public class Land{
 	public Vector2 end;
 
 	public List<String> members = new ArrayList<String>();
-	public boolean isSail;
+	public boolean sail;
 	public double price;
 
 	public Vector3 spawnPoint;
-	public boolean isAllowFight;
-	public boolean isAllowAccess;
-	public boolean isAllowPickUpItem;
+	public boolean allowFight;
+	public boolean allowAccess;
+	public boolean allowPickUpItem;
+	
+	public boolean allowDoor;
+	public boolean allowChest;
+	public boolean allowCraft;
 
 	public String welcomeMessage;
 	public int welcomeParticle;
@@ -63,12 +68,16 @@ public class Land{
 			this.members.add(this.owner);
 		}
 		
-		this.isSail = this.owner.equals("");
+		this.sail = this.owner.equals("");
 		this.price = this.world.getDefaultLandPrice();
 		
-		this.isAllowFight = false;
-		this.isAllowAccess = true;
-		this.isAllowPickUpItem = false;
+		this.allowFight = DefaultValue.landAllowFight;
+		this.allowAccess = DefaultValue.landAllowAccess;
+		this.allowPickUpItem = DefaultValue.landAllowPickUpItem;
+		
+		this.allowDoor = DefaultValue.landAllowDoor;
+		this.allowChest = DefaultValue.landAllowChest;
+		this.allowCraft = DefaultValue.landAllowCraft;
 		
 		this.welcomeMessage = "";
 		this.welcomeParticle = 0;
@@ -105,7 +114,7 @@ public class Land{
 			}
 			
 			if(data.containsKey("issail")){
-				this.isSail = (boolean) data.get("issail");
+				this.sail = (boolean) data.get("issail");
 			}
 			if(data.containsKey("price")){
 				this.price = (double) data.get("price");
@@ -122,13 +131,22 @@ public class Land{
 				);
 			}
 			if(data.containsKey("isallowfight")){
-				this.isAllowFight = (boolean) data.get("isallowfight");
+				this.allowFight = (boolean) data.get("isallowfight");
 			}
 			if(data.containsKey("isallowaccess")){
-				this.isAllowAccess = (boolean) data.get("isallowaccess");
+				this.allowAccess = (boolean) data.get("isallowaccess");
 			}
 			if(data.containsKey("isallowpickupitem")){
-				this.isAllowPickUpItem = (boolean) data.get("isallowpickupitem");
+				this.allowPickUpItem = (boolean) data.get("isallowpickupitem");
+			}
+			if(data.containsKey("isallowdoor")){
+				this.allowDoor = (boolean) data.get("isallowdoor");
+			}
+			if(data.containsKey("isallowchest")){
+				this.allowChest = (boolean) data.get("isallowchest");
+			}
+			if(data.containsKey("isallowcraft")){
+				this.allowCraft = (boolean) data.get("isallowcraft");
 			}
 			if(data.containsKey("welcomemessage")){
 				this.welcomeMessage = (String) data.get("welcomemessage");
@@ -202,11 +220,11 @@ public class Land{
 	}
 
 	public boolean isSail() {
-		return this.isSail;
+		return this.sail;
 	}
 	
 	public void setSail(boolean bool){
-		this.isSail = bool;
+		this.sail = bool;
 	}
 
 	public double getPrice() {
@@ -316,27 +334,51 @@ public class Land{
 	}
 
 	public void setAllowFight(boolean bool){
-		this.isAllowFight = bool;
+		this.allowFight = bool;
 	}
 	
 	public boolean isAllowFight(){
-		return this.isAllowFight;
+		return this.allowFight;
 	}
 
 	public void setAllowAccess(boolean bool){
-		this.isAllowAccess = bool;
+		this.allowAccess = bool;
 	}
 	
 	public boolean isAllowAccess(){
-		return this.isAllowAccess;
+		return this.allowAccess;
 	}
 
 	public void setAllowPickUpItem(boolean bool){
-		this.isAllowPickUpItem = bool;
+		this.allowPickUpItem = bool;
 	}
 	
 	public boolean isAllowPickUpItem(){
-		return this.isAllowPickUpItem;
+		return this.allowPickUpItem;
+	}
+	
+	public void setAllowDoor(boolean bool){
+		this.allowDoor = bool;
+	}
+	
+	public boolean isAllowDoor(){
+		return this.allowDoor;
+	}
+	
+	public void setAllowChest(boolean bool){
+		this.allowChest = bool;
+	}
+	
+	public boolean isAllowChest(){
+		return this.allowChest;
+	}
+	
+	public void setAllowCraft(boolean bool){
+		this.allowCraft = bool;
+	}
+	
+	public boolean isAllowCraft(){
+		return this.allowCraft;
 	}
 
 	public void setWelcomeMessage(String message){
@@ -562,17 +604,27 @@ public class Land{
 	}
 	
 	public void clear(boolean all){
-		this.members.clear();
-		this.isSail = false;
+		this.sail = false;
 		this.price = world.getDefaultLandPrice();
-		this.welcomeMessage = "";
-		this.welcomeParticle = 0;
-		this.resetSpawnPoint();
+		this.members.clear();
 		if(all){
 			this.owner = "";
 		}else{
 			this.members.add(this.owner);
 		}
+		
+		this.welcomeMessage = "";
+		this.welcomeParticle = 0;
+		
+		this.resetSpawnPoint();
+		this.allowFight = DefaultValue.landAllowFight;
+		this.allowAccess = DefaultValue.landAllowAccess;
+		this.allowPickUpItem = DefaultValue.landAllowPickUpItem;
+		
+		this.allowDoor = DefaultValue.landAllowDoor;
+		this.allowChest = DefaultValue.landAllowChest;
+		this.allowCraft = DefaultValue.landAllowCraft;
+		
 		this.clearRooms();
 	}
 	
@@ -583,15 +635,19 @@ public class Land{
 
 		land.start = this.start;
 		land.end = this.end;
-		land.isSail = this.isSail;
+		land.sail = this.sail;
 		land.price = this.price;
 		land.owner = this.owner;
 		land.members = this.members;
 
 		land.spawnPoint = this.spawnPoint;
-		land.isAllowFight = this.isAllowFight;
-		land.isAllowAccess = this.isAllowAccess;
-		land.isAllowPickUpItem = this.isAllowPickUpItem;
+		land.allowFight = this.allowFight;
+		land.allowAccess = this.allowAccess;
+		land.allowPickUpItem = this.allowPickUpItem;
+		
+		land.allowDoor = this.allowDoor;
+		land.allowChest = this.allowChest;
+		land.allowCraft = this.allowCraft;
 
 		land.welcomeMessage = this.welcomeMessage;
 		land.welcomeParticle = this.welcomeParticle;

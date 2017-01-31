@@ -2,6 +2,7 @@ package solo.sololand.world;
 
 import cn.nukkit.Player;
 import cn.nukkit.level.Level;
+import cn.nukkit.math.Vector3;
 import solo.sololand.land.Land;
 import java.util.LinkedHashMap;
 
@@ -10,6 +11,11 @@ public class Island extends World{
 	public Island(Level level){
 		super(level);
 		this.lastRemember = (int) this.properties.get("nextlandnumber");
+		for(Land land : this.lands.values()){
+			if(this.lastRemember < land.getNumber()){
+				this.lastRemember = land.getNumber();
+			}
+		}
 	}
 	
 	@SuppressWarnings("serial")
@@ -23,6 +29,9 @@ public class Island extends World{
 			put("allowexplosion", false);
 			put("allowburn", false);
 			put("allowfight", false);
+			put("allowdoor", true);
+			put("allowchest", false);
+			put("allowcraft", true);
 			
 			//land setting
 			put("allowcreateland", false);
@@ -46,6 +55,12 @@ public class Island extends World{
 		}};
 	}
 	
+	@Override
+	public int getNextLandNumber(){
+		this.properties.put("nextlandnumber", ++this.lastRemember);
+		return this.lastRemember;
+	}
+	
 	public Land createLand(Player player){
 		return this.createLand(player.getName());
 	}
@@ -66,13 +81,17 @@ public class Island extends World{
 		data.put("endx", endX);
 		data.put("endz", endZ);
 		data.put("owner", owner);
+		
+		int spawnX = ((int) ((startX + endX) / 2) / 16) * 16 + 8;
+		int spawnZ = ((int) ((startZ + endZ) / 2) / 16) * 16 + 8;
 
 		Land land = new Land(this, data);
+		land.setSpawnPoint(new Vector3(spawnX, 12.5, spawnZ));
 		this.setLand(land);
 		return land;
 	}
 
-	private Land getLandByAssume(int x, int z){
+	protected Land getLandByAssume(int x, int z){
 		Land land;
 		int assumeNum = this.getLandNumberByXZ(x, z);
 		if(assumeNum > 0){
@@ -93,17 +112,7 @@ public class Island extends World{
 		if(land != null){
 			return land;
 		}
-		land = this.getLandByRecent(x, z);
-		if(land != null){
-			return land;
-		}
-		for(Land land2 : this.lands.values()){
-			if(land2.isInside(x, z)){
-				this.recentLands.add(land2.getNumber());
-				return land2;
-			}
-		}
-		return null;
+		return super.getLand(x, z);
 	}
 
 	protected int getLandNumberByXZ(int x, int z){

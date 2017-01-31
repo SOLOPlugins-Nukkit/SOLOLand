@@ -25,6 +25,8 @@ import solo.sololand.command.MainCommand;
 import solo.sololand.command.defaults.world.WorldCommand;
 import solo.sololand.command.defaults.land.LandCommand;
 import solo.sololand.command.defaults.room.RoomCommand;
+import solo.sololand.util.DefaultValue;
+import solo.sololand.util.PluginInformation;
 import solo.sololand.util.Setting;
 import solo.sololand.world.World;
 
@@ -91,6 +93,8 @@ public class Main extends PluginBase {
 	// *************************** //
 	private void initialSetting(){
 		Setting.init();
+		DefaultValue.init();
+		PluginInformation.init();
 	}
 	
 	private void initialGenerators(){

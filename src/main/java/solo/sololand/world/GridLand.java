@@ -2,13 +2,13 @@ package solo.sololand.world;
 
 import cn.nukkit.level.Level;
 import solo.sololand.land.Land;
+
 import java.util.LinkedHashMap;
 
 public class GridLand extends World{
-
+	
 	public GridLand(Level level){
 		super(level);
-		this.lastRemember = (int) this.properties.get("nextlandnumber");
 	}
 	
 	@SuppressWarnings("serial")
@@ -22,6 +22,9 @@ public class GridLand extends World{
 			put("allowexplosion", false);
 			put("allowburn", false);
 			put("allowfight", false);
+			put("allowdoor", true);
+			put("allowchest", false);
+			put("allowcraft", true);
 			
 			//land setting
 			put("allowcreateland", false);
@@ -39,40 +42,31 @@ public class GridLand extends World{
 			put("maxroomcreatecount", 50);
 			put("minroomlength", 3);
 			put("maxroomlength", 50);
-			
-			//only for island or gridland
-			put("nextlandnumber", 1);
 		}};
 	}
 
 	@Override
 	public Land getLand(int x, int z){
-		Land land = this.getLandByRecent(x, z);
+		Land land = super.getLand(x, z);
 		if(land != null){
 			return land;
-		}
-		for(Land check : this.lands.values()){
-			if(check.isInside(x, z)){
-				this.recentLands.add(check.getNumber());
-				return check;
-			}
 		}
 
 		/* Auto Land Make Code */
 		if(x > 5 && z > 5){
-			int gridLandX = x % 37;
-			int gridLandZ = z % 37;
+			int startX = (int)( (x - 1) / 37) * 37 + 6;
+			int startZ = (int)( (z - 1) / 37) * 37 + 6;
 			if(
-				(gridLandX >= 6 && gridLandZ >= 6) ||
-				(gridLandX == 0 && gridLandZ >= 6) ||
-				(gridLandZ == 0 && gridLandX >= 6) ||
-				(gridLandX == 0 && gridLandZ == 0)
-			){
-				int startX = (int)(x / 37) * 37 + 6;
-				int startZ = (int)(z / 37) * 37 + 6;
-				Land createdLand = this.createLand(startX, startZ, startX + 31, startZ + 31);
-				this.setLand(createdLand);
-				return createdLand;
+					x >= startX &&
+					z >= startZ &&
+					x <= startX + 31 &&
+					z <= startZ + 31 
+					){
+				land = this.createLand(startX, startZ, startX + 31, startZ + 31);
+				if(this.getOverlap(land).size() == 0){
+					this.setLand(land);
+					return land;
+				}
 			}
 		}
 		/* End */
