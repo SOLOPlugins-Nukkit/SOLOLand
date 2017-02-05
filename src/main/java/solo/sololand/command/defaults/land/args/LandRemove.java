@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
 
 public class LandRemove extends SubCommand{
@@ -41,7 +41,7 @@ public class LandRemove extends SubCommand{
 				Land toRemove = Queue.getLand(player);
 				if(land == toRemove){
 					world.removeLand(land);
-					Message.success(player, "성공적으로 " + Integer.toString(land.getNumber()) + "번 땅을 제거하였습니다.");
+					Message.normal(player, "성공적으로 " + Integer.toString(land.getNumber()) + "번 땅을 제거하였습니다.");
 					Queue.clean(player);
 				}else{
 					Message.alert(player, "땅 삭제를 진행하던 중 오류가 발생하였습니다. 다시 진행해주세요.");

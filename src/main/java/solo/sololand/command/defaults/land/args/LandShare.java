@@ -7,7 +7,7 @@ import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandShare extends SubCommand{
 
@@ -59,8 +59,8 @@ public class LandShare extends SubCommand{
 				continue;
 			}
 			land.addMember(targetName);
-			Message.success(player, target.getName() + "님에게 땅을 공유하였습니다.");
-			Message.success(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 공유하셨습니다.");
+			Message.normal(player, target.getName() + "님에게 땅을 공유하였습니다.");
+			Message.normal(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 공유하셨습니다.");
 		}
 		return true;
 	}

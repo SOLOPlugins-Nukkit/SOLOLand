@@ -8,7 +8,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class RoomGive extends SubCommand{
 
@@ -57,8 +57,8 @@ public class RoomGive extends SubCommand{
 		//}
 		room.clear();
 		room.setOwner(targetName);
-		Message.success(player, target.getName() + "님에게 " + Integer.toString(land.getNumber()) + "번 방을 주었습니다.");
-		Message.success(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 양도하셨습니다.");
+		Message.normal(player, target.getName() + "님에게 " + Integer.toString(land.getNumber()) + "번 방을 주었습니다.");
+		Message.normal(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 양도하셨습니다.");
 		return true;
 	}
 }

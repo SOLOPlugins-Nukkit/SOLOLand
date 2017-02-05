@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldSetSpawn extends SubCommand{
 
@@ -19,7 +19,7 @@ public class WorldSetSpawn extends SubCommand{
 		Player player = (Player) sender;
 		World world = World.get(player);
 		world.getLevel().setSpawnLocation(player);
-		Message.success(player, world.getName() + " 월드의 스폰위치를 변경하였습니다.");
+		Message.normal(player, world.getName() + " 월드의 스폰위치를 변경하였습니다.");
 		return true;
 	}
 }

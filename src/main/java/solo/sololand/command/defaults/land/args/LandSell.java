@@ -7,7 +7,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.queue.Queue;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandSell extends SubCommand{
 

@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandAllowFight extends SubCommand{
 
@@ -30,10 +30,10 @@ public class LandAllowFight extends SubCommand{
 		}
 		if(land.isAllowFight()){
 			land.setAllowFight(false);
-			Message.success(player, "PVP를 허용하지 않도록 설정하였습니다.");
+			Message.normal(player, "PVP를 허용하지 않도록 설정하였습니다.");
 		}else{
 			land.setAllowFight(true);
-			Message.success(player, "PVP를 허용하도록 설정하였습니다.");
+			Message.normal(player, "PVP를 허용하도록 설정하였습니다.");
 		}
 		return true;
 	}

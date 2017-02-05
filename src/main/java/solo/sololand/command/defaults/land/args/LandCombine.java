@@ -10,9 +10,9 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Economy;
 
 public class LandCombine extends SubCommand{
 
@@ -207,9 +207,9 @@ public class LandCombine extends SubCommand{
 			world.removeLand(overlap);
 		}
 		world.setLand(land.getNumber(), afterLand);
-		Message.success(player, "성공적으로 땅를 합쳤습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - land.size()) + "블럭");
+		Message.normal(player, "성공적으로 땅를 합쳤습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - land.size()) + "블럭");
 		if(overlapRoomList.size() > 0){
-			Message.success(player, "합쳐진 방 갯수 : " + Integer.toString(overlapRoomList.size()) + "개");
+			Message.normal(player, "합쳐진 방 갯수 : " + Integer.toString(overlapRoomList.size()) + "개");
 		}
 		Queue.clean(player);
 		return true;

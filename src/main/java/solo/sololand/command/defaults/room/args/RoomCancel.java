@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
 
 public class RoomCancel extends SubCommand{
@@ -31,25 +31,25 @@ public class RoomCancel extends SubCommand{
 			case Queue.LAND_REDUCE_FIRST:
 			case Queue.LAND_REDUCE_SECOND:
 			case Queue.LAND_SELL:
-				Message.success(player, "땅 작업이 진행중입니다. /땅 취소 명령어로 작업을 중단해주세요.");
+				Message.normal(player, "땅 작업이 진행중입니다. /땅 취소 명령어로 작업을 중단해주세요.");
 				break;
 				
 			case Queue.ROOM_CREATE_FIRST:
 			case Queue.ROOM_CREATE_SECOND:
 			case Queue.ROOM_CREATE_THIRD:
-				Message.success(player, "진행중이던 방 생성 작업을 취소하였습니다.");
+				Message.normal(player, "진행중이던 방 생성 작업을 취소하였습니다.");
 				break;
 				
 			case Queue.ROOM_REMOVE:
-				Message.success(player, "진행중이던 방 삭제 작업을 취소하였습니다.");
+				Message.normal(player, "진행중이던 방 삭제 작업을 취소하였습니다.");
 				break;
 				
 			case Queue.ROOM_SELL:
-				Message.success(player, "진행중이던 방 판매 작업을 취소하였습니다.");
+				Message.normal(player, "진행중이던 방 판매 작업을 취소하였습니다.");
 				break;
 				
 			default:
-				Message.success(player, "진행중이던 작업을 취소하였습니다.");
+				Message.normal(player, "진행중이던 작업을 취소하였습니다.");
 		}
 		Queue.clean(player);
 		return true;

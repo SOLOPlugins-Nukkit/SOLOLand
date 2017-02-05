@@ -6,7 +6,7 @@ import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandWelcomeMessage extends SubCommand{
 
@@ -46,7 +46,7 @@ public class LandWelcomeMessage extends SubCommand{
 		}
 		String welcomeMsg = sb.toString();
 		land.setWelcomeMessage(welcomeMsg);
-		Message.success(player, "성공적으로 환영말을 설정하였습니다 : " + welcomeMsg);
+		Message.normal(player, "성공적으로 환영말을 설정하였습니다 : " + welcomeMsg);
 		return true;
 	}
 }

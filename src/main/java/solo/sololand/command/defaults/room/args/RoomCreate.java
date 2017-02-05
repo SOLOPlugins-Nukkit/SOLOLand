@@ -9,9 +9,9 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Economy;
 
 public class RoomCreate extends SubCommand{
 
@@ -98,7 +98,7 @@ public class RoomCreate extends SubCommand{
 						Economy.reduceMoney(player, price);
 					}
 					land.setRoom(room.getLand().getNextRoomNumber(), room);
-					Message.success(player, "성공적으로 방을 생성하였습니다. 방 번호는 " + Integer.toString(room.getNumber()) + "번 입니다.");
+					Message.normal(player, "성공적으로 방을 생성하였습니다. 방 번호는 " + Integer.toString(room.getNumber()) + "번 입니다.");
 					Queue.clean(player);
 				}catch(Exception e){
 					Message.alert(player, "방 생성중에 오류가 발생하였습니다. 방 생성을 다시 진행해주세요.");

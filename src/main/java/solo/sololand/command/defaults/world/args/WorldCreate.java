@@ -7,8 +7,8 @@ import cn.nukkit.level.generator.Generator;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.ArrayUtil;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.ArrayUtil;
+import solo.solobasepackage.util.Message;
 
 import java.io.File;
 
@@ -65,10 +65,10 @@ public class WorldCreate extends SubCommand{
 				Message.alert(sender, "알 수 없는 오류로 월드 생성에 실패하였습니다.");
 				return true;
 			}
-			Message.success(sender, "성공적으로 " + args[0] + " 월드를 로드하였습니다.");
+			Message.normal(sender, "성공적으로 " + args[0] + " 월드를 로드하였습니다.");
 			return true;
 		}
-		Message.success(sender, "성공적으로 " + args[0] + " 월드를 생성하였습니다.");
+		Message.normal(sender, "성공적으로 " + args[0] + " 월드를 생성하였습니다.");
 		return true;
 	}
 }

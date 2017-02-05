@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldSetCustomName extends SubCommand{
 
@@ -39,7 +39,7 @@ public class WorldSetCustomName extends SubCommand{
 		}
 		World world = World.get(player);
 		world.setCustomName(customName);
-		Message.success(player, world.getName() + " 월드의 이름을 " + customName + " 으로 변경하였습니다.");
+		Message.normal(player, world.getName() + " 월드의 이름을 " + customName + " 으로 변경하였습니다.");
 		return true;
 	}
 }

@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandCancelSell extends SubCommand{
  
@@ -33,7 +33,7 @@ public class LandCancelSell extends SubCommand{
 			return true;
 		}
 		land.setSail(false);
-		Message.success(player, "땅 판매를 취소하였습니다.");
+		Message.normal(player, "땅 판매를 취소하였습니다.");
 		return true;
 	}
 }

@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldAllowCombineLand extends SubCommand{
 
@@ -19,7 +19,7 @@ public class WorldAllowCombineLand extends SubCommand{
 		Player player = (Player) sender;
 		World world = World.get(player);
 		world.setAllowCombineLand(! world.isAllowCombineLand());
-		Message.success(player, world.isAllowCombineLand() ? world.getCustomName() + "월드에서 땅을 합칠 수 있도록 설정하였습니다." : world.getCustomName() + "월드에서 땅을 합칠 수 없도록 설정하였습니다.");
+		Message.normal(player, world.isAllowCombineLand() ? world.getCustomName() + "월드에서 땅을 합칠 수 있도록 설정하였습니다." : world.getCustomName() + "월드에서 땅을 합칠 수 없도록 설정하였습니다.");
 		return true;
 	}
 }

@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandLeave extends SubCommand{
 
@@ -32,7 +32,7 @@ public class LandLeave extends SubCommand{
 			return true;
 		}
 		land.removeMember(player);
-		Message.success(player, "성공적으로 공유받던 땅에서 나갔습니다.");
+		Message.normal(player, "성공적으로 공유받던 땅에서 나갔습니다.");
 		return true;
 	}
 }

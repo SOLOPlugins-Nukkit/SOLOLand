@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldMaxLandCount extends SubCommand{
 
@@ -31,7 +31,7 @@ public class WorldMaxLandCount extends SubCommand{
 		Player player = (Player) sender;
 		World world = World.get(player);
 		world.setMaxLandCount(maxCount);
-		Message.success(player, world.getCustomName() + " 월드의 땅 소지 가능 최대 갯수를 " + args[0] + "개로 설정하였습니다.");
+		Message.normal(player, world.getCustomName() + " 월드의 땅 소지 가능 최대 갯수를 " + args[0] + "개로 설정하였습니다.");
 		return true;
 	}
 }

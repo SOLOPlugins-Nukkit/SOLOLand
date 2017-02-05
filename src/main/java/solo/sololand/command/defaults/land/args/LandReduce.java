@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
 
 public class LandReduce extends SubCommand{
@@ -59,7 +59,7 @@ public class LandReduce extends SubCommand{
 						return true;
 					}
 					world.setLand(beforeLand.getNumber(), afterLand);
-					Message.success(player, "성공적으로 땅 크기를 축소하였습니다. 변경된 크기 : " + Integer.toString(beforeLand.size() - afterLand.size()) + "블럭");
+					Message.normal(player, "성공적으로 땅 크기를 축소하였습니다. 변경된 크기 : " + Integer.toString(beforeLand.size() - afterLand.size()) + "블럭");
 					Queue.clean(player);
 				}catch(Exception e){
 					Message.alert(player, "땅 축소중 오류가 발생하였습니다. 땅 축소 작업을 다시 시도해주세요.");

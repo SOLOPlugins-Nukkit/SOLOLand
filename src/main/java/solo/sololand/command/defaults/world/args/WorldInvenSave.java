@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldInvenSave extends SubCommand{
 
@@ -20,10 +20,10 @@ public class WorldInvenSave extends SubCommand{
 		World world = World.get(player);
 		if(world.isInvenSave()){
 			world.setInvenSave(false);
-			Message.success(sender, world.getCustomName() + " 월드의 인벤세이브를 해제하였습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드의 인벤세이브를 해제하였습니다.");
 		}else{
 			world.setInvenSave(true);
-			Message.success(sender, world.getCustomName() + " 월드의 인벤세이브를 켰습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드의 인벤세이브를 켰습니다.");
 		}
 		return true;
 	}

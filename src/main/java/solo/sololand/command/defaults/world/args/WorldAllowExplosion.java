@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldAllowExplosion extends SubCommand{
 
@@ -19,10 +19,10 @@ public class WorldAllowExplosion extends SubCommand{
 		World world = World.get(player);
 		if(world.isAllowExplosion()){
 			world.setAllowExplosion(false);
-			Message.success(sender, world.getCustomName() + " 월드의 폭발허용을 껐습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드의 폭발허용을 껐습니다.");
 		}else{
 			world.setAllowExplosion(true);
-			Message.success(sender, world.getCustomName() + " 월드의 폭발허용을 켰습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드의 폭발허용을 켰습니다.");
 		}
 		return true;
 	}

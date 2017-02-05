@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandAllowChest extends SubCommand{
 
@@ -29,7 +29,7 @@ public class LandAllowChest extends SubCommand{
 			return true;
 		}
 		land.setAllowChest(! land.isAllowChest());
-		Message.success(player, land.isAllowChest() ? "상자를 허용하도록 설정하였습니다." : "상자를 허용하지 않도록 설정하였습니다.");
+		Message.normal(player, land.isAllowChest() ? "상자를 허용하도록 설정하였습니다." : "상자를 허용하지 않도록 설정하였습니다.");
 		return true;
 	}
 }

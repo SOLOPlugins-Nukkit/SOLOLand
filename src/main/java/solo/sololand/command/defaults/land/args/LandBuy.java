@@ -7,8 +7,8 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Economy;
 
 public class LandBuy extends SubCommand{
 
@@ -50,7 +50,7 @@ public class LandBuy extends SubCommand{
 		Economy.addMoney(land.getOwner(), landPrice);
 		Player prevOwner = Server.getInstance().getPlayerExact(land.getOwner());
 		if(prevOwner != null){
-			Message.success(prevOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 구매하셨습니다.");
+			Message.normal(prevOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 구매하셨습니다.");
 		}
 
 		land.clear();
@@ -60,7 +60,7 @@ public class LandBuy extends SubCommand{
 		if(world.getLand(land.getNumber()) == null){
 			world.setLand(land);
 		}
-		Message.success(player, Integer.toString(land.getNumber()) + "번 땅을 구매하였습니다.");
+		Message.normal(player, Integer.toString(land.getNumber()) + "번 땅을 구매하였습니다.");
 		return true;
 	}
 }

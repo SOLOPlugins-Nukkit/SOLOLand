@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldPricePerBlock extends SubCommand{
 
@@ -31,7 +31,7 @@ public class WorldPricePerBlock extends SubCommand{
 		}
 		World world = World.get(player);
 		world.setPricePerBlock(pricePerBlock);
-		Message.success(player, world.getCustomName() + " 월드의 블럭 당 가격을 " + args[0] + "원으로 설정하였습니다.");
+		Message.normal(player, world.getCustomName() + " 월드의 블럭 당 가격을 " + args[0] + "원으로 설정하였습니다.");
 		return true;
 	}
 }

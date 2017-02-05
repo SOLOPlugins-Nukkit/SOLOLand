@@ -3,7 +3,7 @@ package solo.sololand.command;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 import java.util.ArrayList;
 

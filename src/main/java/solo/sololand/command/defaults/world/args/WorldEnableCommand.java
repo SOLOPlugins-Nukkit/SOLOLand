@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldEnableCommand extends SubCommand{
 
@@ -19,10 +19,10 @@ public class WorldEnableCommand extends SubCommand{
 		World world = World.get(player);
 		if(world.isEnableWorldCommand()){
 			world.setEnableWorldCommand(false);
-			Message.success(sender, world.getCustomName() + " 월드 명령어를 껐습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드 명령어를 껐습니다.");
 		}else{
 			world.setEnableWorldCommand(true);
-			Message.success(sender, world.getCustomName() + " 월드 명령어를 켰습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드 명령어를 켰습니다.");
 		}
 		return true;
 	}

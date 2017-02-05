@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandAccess extends SubCommand{
 
@@ -30,10 +30,10 @@ public class LandAccess extends SubCommand{
 		}
 		if(land.isAllowAccess()){
 			land.setAllowAccess(false);
-			Message.success(player, "다른 유저의 출입을 허용하지 않도록 설정하였습니다.");
+			Message.normal(player, "다른 유저의 출입을 허용하지 않도록 설정하였습니다.");
 		}else{
 			land.setAllowAccess(true);
-			Message.success(player, "다른 유저의 출입을 허용하도록 설정하였습니다.");
+			Message.normal(player, "다른 유저의 출입을 허용하도록 설정하였습니다.");
 		}
 		return true;
 	}

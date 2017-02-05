@@ -7,8 +7,8 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.world.Island;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Economy;
 
 public class CustomBuy extends SubCommand{
 
@@ -46,7 +46,7 @@ public class CustomBuy extends SubCommand{
 		Island island = (Island) this.world;
 		land = island.createLand(player);
 
-		Message.success(player, "성공적으로 " + this.world.getCustomName() +" 땅을 구매하였습니다. 땅 번호 : " + Integer.toString(land.getNumber()));
+		Message.normal(player, "성공적으로 " + this.world.getCustomName() +" 땅을 구매하였습니다. 땅 번호 : " + Integer.toString(land.getNumber()));
 		return true;
 	}
 }

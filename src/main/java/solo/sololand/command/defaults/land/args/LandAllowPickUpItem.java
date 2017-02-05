@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandAllowPickUpItem extends SubCommand{
 
@@ -33,10 +33,10 @@ public class LandAllowPickUpItem extends SubCommand{
 		}
 		if(land.isAllowPickUpItem()){
 			land.setAllowPickUpItem(false);
-			Message.success(player, "다른 유저가 아이템을 주울 수 없도록 설정하였습니다.");
+			Message.normal(player, "다른 유저가 아이템을 주울 수 없도록 설정하였습니다.");
 		}else{
 			land.setAllowPickUpItem(true);
-			Message.success(player, "다른 유저가 아이템을 주울 수 있도록 설정하였습니다.");
+			Message.normal(player, "다른 유저가 아이템을 주울 수 있도록 설정하였습니다.");
 		}
 		return true;
 	}

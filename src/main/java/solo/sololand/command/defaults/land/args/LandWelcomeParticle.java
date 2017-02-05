@@ -3,12 +3,13 @@ package solo.sololand.command.defaults.land.args;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
-import cn.nukkit.level.particle.Particle;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.ArrayUtil;
+import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.ParticleUtil;
 
 public class LandWelcomeParticle extends SubCommand{
 
@@ -16,7 +17,7 @@ public class LandWelcomeParticle extends SubCommand{
 		super("환영효과", "다른 유저가 땅 방문시 나타낼 효과를 설정합니다.");
 		this.setPermission("sololand.command.land.welcomeparticle");
 		this.addCommandParameters(new CommandParameter[]{
-			new CommandParameter("물방울/반짝/연기/하트/용암/불/제거", CommandParameter.ARG_TYPE_STRING, false)
+			new CommandParameter(ArrayUtil.implode("/", ParticleUtil.getAvailable()) + " 또는 제거", CommandParameter.ARG_TYPE_STRING, false)
 		});
 	}
 
@@ -36,34 +37,12 @@ public class LandWelcomeParticle extends SubCommand{
 		if(args.length < 1){
 			return false;
 		}
-		int particle;
-		switch(args[0]){
-			case "물방울":
-				particle = Particle.TYPE_BUBBLE;
-				break;
-			case "반짝":
-				particle = Particle.TYPE_CRITICAL;
-				break;
-			case "연기":
-				particle = Particle.TYPE_SMOKE;
-				break;
-			case "하트":
-				particle = Particle.TYPE_HEART;
-				break;
-			case "용암":
-				particle = Particle.TYPE_LAVA;
-				break;
-			case "불":
-				particle = Particle.TYPE_FLAME;
-				break;
-			case "제거":
-				particle = 0;
-				break; 
-			default:
-				return false;
+		int particle = ParticleUtil.fromString(args[0]);
+		if(particle == 0 && ! args[0].equals("제거")){
+			return false;
 		}
 		land.setWelcomeParticle(particle);
-		Message.success(player, "성공적으로 환영 효과를 설정하였습니다 : " + args[0]);
+		Message.normal(player, particle == 0 ? "성공적으로 환영 효과를 제거하였습니다" : "성공적으로 환영 효과를 설정하였습니다 : " + args[0]);
 		return true;
 	}
 }

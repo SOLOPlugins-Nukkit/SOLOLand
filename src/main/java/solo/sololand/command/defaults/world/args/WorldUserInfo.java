@@ -10,7 +10,7 @@ import cn.nukkit.level.Level;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldUserInfo extends SubCommand{
 

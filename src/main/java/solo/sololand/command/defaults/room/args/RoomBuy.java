@@ -8,8 +8,8 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Economy;
 
 public class RoomBuy extends SubCommand{
 
@@ -54,12 +54,12 @@ public class RoomBuy extends SubCommand{
 		Economy.addMoney(land.getOwner(), roomPrice);
 		Player landOwner = Server.getInstance().getPlayerExact(land.getOwner());
 		if(landOwner != null){
-			Message.success(landOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 구매하셨습니다.");
+			Message.normal(landOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 구매하셨습니다.");
 		}
 
 		room.clear();
 		room.setOwner(player);
-		Message.success(player, room.getAddress() + "번 방을 구매하였습니다.");
+		Message.normal(player, room.getAddress() + "번 방을 구매하였습니다.");
 		return true;
 	}
 }

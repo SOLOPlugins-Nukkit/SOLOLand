@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandAllowDoor extends SubCommand{
 
@@ -29,7 +29,7 @@ public class LandAllowDoor extends SubCommand{
 			return true;
 		}
 		land.setAllowDoor(! land.isAllowDoor());
-		Message.success(player, land.isAllowDoor() ? "문을 허용하도록 설정하였습니다." : "문을 허용하지 않도록 설정하였습니다.");
+		Message.normal(player, land.isAllowDoor() ? "문을 허용하도록 설정하였습니다." : "문을 허용하지 않도록 설정하였습니다.");
 		return true;
 	}
 }

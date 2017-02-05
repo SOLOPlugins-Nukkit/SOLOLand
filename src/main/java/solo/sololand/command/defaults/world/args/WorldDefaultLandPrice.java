@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldDefaultLandPrice extends SubCommand{
 
@@ -31,7 +31,7 @@ public class WorldDefaultLandPrice extends SubCommand{
 			return false;
 		}
 		world.setDefaultLandPrice(price);
-		Message.success(player, world.getCustomName() + " 월드의 기본 땅 가격을 " + args[0] + "원으로 설정하였습니다.");
+		Message.normal(player, world.getCustomName() + " 월드의 기본 땅 가격을 " + args[0] + "원으로 설정하였습니다.");
 		return true;
 	}
 }

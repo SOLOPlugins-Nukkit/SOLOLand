@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldMaxLandLength extends SubCommand{
 
@@ -30,7 +30,7 @@ public class WorldMaxLandLength extends SubCommand{
 		Player player = (Player) sender;
 		World world = World.get(player);
 		world.setMaxLandLength(maxLength);
-		Message.success(player, world.getCustomName() + " 월드의 땅 생성 가능 최대 길이를 " + args[0] + "블럭으로 설정하였습니다.");
+		Message.normal(player, world.getCustomName() + " 월드의 땅 생성 가능 최대 길이를 " + args[0] + "블럭으로 설정하였습니다.");
 		return true;
 	}
 }

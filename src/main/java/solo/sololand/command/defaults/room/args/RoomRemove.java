@@ -7,7 +7,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
 
 public class RoomRemove extends SubCommand{
@@ -47,7 +47,7 @@ public class RoomRemove extends SubCommand{
 				Room toRemove = Queue.getRoom(player);
 				if(room == toRemove){
 					land.removeRoom(room);
-					Message.success(player, "성공적으로 " + Integer.toString(room.getNumber()) + "번 방을 제거하였습니다.");
+					Message.normal(player, "성공적으로 " + Integer.toString(room.getNumber()) + "번 방을 제거하였습니다.");
 					Queue.clean(player);
 				}else{
 					Message.alert(player, "방 삭제를 진행하던 중 오류가 발생하였습니다. 다시 진행해주세요.");

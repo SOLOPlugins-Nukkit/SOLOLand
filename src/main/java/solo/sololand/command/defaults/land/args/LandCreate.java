@@ -8,9 +8,9 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Economy;
 
 public class LandCreate extends SubCommand{
 
@@ -81,7 +81,7 @@ public class LandCreate extends SubCommand{
 						Economy.reduceMoney(player, price);
 					}
 					world.setLand(land.getWorld().getNextLandNumber(), land);
-					Message.success(player, "성공적으로 땅을 생성하였습니다. 땅 번호는 " + Integer.toString(land.getNumber()) + "번 입니다.");
+					Message.normal(player, "성공적으로 땅을 생성하였습니다. 땅 번호는 " + Integer.toString(land.getNumber()) + "번 입니다.");
 					Queue.clean(player);
 				}catch( Exception e){
 					Message.alert(player, "땅 생성중에 오류가 발생하였습니다. 땅 생성을 다시 진행해주세요.");

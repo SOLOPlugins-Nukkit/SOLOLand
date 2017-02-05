@@ -8,7 +8,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class RoomShare extends SubCommand{
 
@@ -65,8 +65,8 @@ public class RoomShare extends SubCommand{
 				continue;
 			}
 			room.addMember(targetName);
-			Message.success(player, target.getName() + "님에게 방을 공유하였습니다.");
-			Message.success(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 공유하셨습니다.");
+			Message.normal(player, target.getName() + "님에게 방을 공유하였습니다.");
+			Message.normal(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 공유하셨습니다.");
 		}
 		return true;
 	}

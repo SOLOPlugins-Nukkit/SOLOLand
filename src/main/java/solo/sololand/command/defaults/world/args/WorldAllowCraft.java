@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldAllowCraft extends SubCommand{
 
@@ -19,7 +19,7 @@ public class WorldAllowCraft extends SubCommand{
 		Player player = (Player) sender;
 		World world = World.get(player);
 		world.setAllowCraft(! world.isAllowCraft());
-		Message.success(player, world.isAllowCraft() ? world.getCustomName() + "월드에서 조합대를 허용하도록 설정하였습니다." : world.getCustomName() + "월드에서 조합대를 허용하지 않도록 설정하였습니다.");
+		Message.normal(player, world.isAllowCraft() ? world.getCustomName() + "월드에서 조합대를 허용하도록 설정하였습니다." : world.getCustomName() + "월드에서 조합대를 허용하지 않도록 설정하였습니다.");
 		return true;
 	}
 }

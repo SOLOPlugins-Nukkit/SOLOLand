@@ -6,7 +6,7 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandSetSpawn extends SubCommand{
 
@@ -29,7 +29,7 @@ public class LandSetSpawn extends SubCommand{
 			return true;
 		}
 		land.setSpawnPoint(player);
-		Message.success(player, "땅 스폰 위치를 변경하였습니다.");
+		Message.normal(player, "땅 스폰 위치를 변경하였습니다.");
 		return true;
 	}
 }

@@ -7,8 +7,8 @@ import cn.nukkit.command.PluginCommand;
 
 import java.util.LinkedHashMap;
 import solo.sololand.Main;
-import solo.sololand.external.Debug;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Debug;
+import solo.solobasepackage.util.Message;
 
 public class CommandMap<T extends BaseCommand>{
 	

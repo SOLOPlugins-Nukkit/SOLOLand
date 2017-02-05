@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldAllowResizeLand extends SubCommand{
 
@@ -20,10 +20,10 @@ public class WorldAllowResizeLand extends SubCommand{
 		World world = World.get(player);
 		if(world.isAllowResizeLand()){
 			world.setAllowResizeLand(false);
-			Message.success(sender, world.getCustomName() + " 월드의 땅 크기변경을 금지하였습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드의 땅 크기변경을 금지하였습니다.");
 		}else{
 			world.setAllowResizeLand(true);
-			Message.success(sender, world.getCustomName() + " 월드의 땅 크기변경을 허용하였습니다.");
+			Message.normal(sender, world.getCustomName() + " 월드의 땅 크기변경을 허용하였습니다.");
 		}
 		return true;
 	}

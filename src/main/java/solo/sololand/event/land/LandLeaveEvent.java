@@ -3,7 +3,7 @@ package solo.sololand.event.land;
 import cn.nukkit.Player;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.land.Land;
 
 public class LandLeaveEvent extends LandEvent implements Cancellable{

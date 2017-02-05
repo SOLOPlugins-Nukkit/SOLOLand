@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class WorldMove extends SubCommand{
 
@@ -33,7 +33,7 @@ public class WorldMove extends SubCommand{
 			}
 		}
 		player.teleport(target.getLevel().getSpawnLocation());
-		Message.success(player, target.getCustomName() + " 월드로 이동하였습니다.");
+		Message.normal(player, target.getCustomName() + " 월드로 이동하였습니다.");
 		return true;
 	}
 }

@@ -7,7 +7,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class LandInfo extends SubCommand{
 			information.add("땅 환영말 : " + land.getWelcomeMessage());
 		}
 		sb = new StringBuilder();
-		sb.append((land.isAllowAccess()) ? "§a(접근)  " : "§c(접근)  ");
+		sb.append((land.isAllowAccess()) ? "§a(출입)  " : "§c(출입)  ");
 		sb.append((land.isAllowFight()) ? "§a(PVP)  " : "§c(PVP)  ");
 		sb.append((land.isAllowPickUpItem()) ? "§a(아이템줍기)  " : "§c(아이템줍기)  ");
 		sb.append((land.isAllowDoor()) ? "§a(문)  " : "§c(문)");

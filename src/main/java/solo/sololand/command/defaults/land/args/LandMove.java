@@ -6,7 +6,7 @@ import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandMove extends SubCommand{
 
@@ -46,7 +46,7 @@ public class LandMove extends SubCommand{
 			return true;
 		}
 		player.teleport(land.getSpawnPoint());
-		Message.success(player, args[0] + "번 땅으로 이동하였습니다.");
+		Message.normal(player, args[0] + "번 땅으로 이동하였습니다.");
 		return true;
 	}
 }

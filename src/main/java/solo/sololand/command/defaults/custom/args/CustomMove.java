@@ -8,7 +8,7 @@ import cn.nukkit.level.Position;
 import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class CustomMove extends SubCommand{
 
@@ -55,7 +55,7 @@ public class CustomMove extends SubCommand{
 			return true;
 		}
 		player.teleport(Position.fromObject(land.getSpawnPoint(), this.world.getLevel()));
-		Message.success(player, args[0] + "번 땅으로 이동하였습니다.");
+		Message.normal(player, args[0] + "번 땅으로 이동하였습니다.");
 		return true;
 	}
 }

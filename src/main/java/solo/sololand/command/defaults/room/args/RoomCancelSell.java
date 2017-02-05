@@ -7,7 +7,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class RoomCancelSell extends SubCommand{
  
@@ -39,7 +39,7 @@ public class RoomCancelSell extends SubCommand{
 			return true;
 		}
 		room.setSail(false);
-		Message.success(player, "방 판매를 취소하였습니다.");
+		Message.normal(player, "방 판매를 취소하였습니다.");
 		return true;
 	}
 }

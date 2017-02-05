@@ -7,7 +7,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class RoomMove extends SubCommand{
 
@@ -68,7 +68,7 @@ public class RoomMove extends SubCommand{
 			return true;
 		}
 		player.teleport(room.getSpawnPoint());
-		Message.success(player, room.getAddress() + "번 방으로 이동하였습니다.");
+		Message.normal(player, room.getAddress() + "번 방으로 이동하였습니다.");
 		return true;
 	}
 }

@@ -7,7 +7,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class RoomSetSpawn extends SubCommand{
 
@@ -35,7 +35,7 @@ public class RoomSetSpawn extends SubCommand{
 			return true;
 		}
 		room.setSpawnPoint(player);
-		Message.success(player, "방 스폰 위치를 변경하였습니다.");
+		Message.normal(player, "방 스폰 위치를 변경하였습니다.");
 		return true;
 	}
 }

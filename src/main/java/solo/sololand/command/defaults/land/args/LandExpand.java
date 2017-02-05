@@ -8,9 +8,9 @@ import cn.nukkit.command.CommandSender;
 import solo.sololand.command.SubCommand;
 import solo.sololand.land.Land;
 import solo.sololand.world.World;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
-import solo.sololand.external.Economy;
+import solo.solobasepackage.util.Economy;
 
 public class LandExpand extends SubCommand{
 
@@ -88,7 +88,7 @@ public class LandExpand extends SubCommand{
 						Economy.reduceMoney(player, price);
 					}
 					world.setLand(beforeLand.getNumber(), afterLand);
-					Message.success(player, "성공적으로 땅를 확장하였습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - beforeLand.size()) + "블럭");
+					Message.normal(player, "성공적으로 땅를 확장하였습니다. 확장된 크기 : " + Integer.toString(afterLand.size() - beforeLand.size()) + "블럭");
 					Queue.clean(player);
 				}catch(Exception e){
 					Message.alert(player, "땅 확장중 오류가 발생하였습니다. 땅 확장 작업을 다시 시도해주세요.");

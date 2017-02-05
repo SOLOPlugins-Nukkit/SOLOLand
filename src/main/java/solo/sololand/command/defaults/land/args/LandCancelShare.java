@@ -7,7 +7,7 @@ import cn.nukkit.command.data.CommandParameter;
 import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 
 public class LandCancelShare extends SubCommand{
 
@@ -57,7 +57,7 @@ public class LandCancelShare extends SubCommand{
 				continue;
 			}
 			land.removeMember(targetName);
-			Message.success(player, targetName + "님을 공유 취소 하였습니다.");
+			Message.normal(player, targetName + "님을 공유 취소 하였습니다.");
 			if(target != null){
 				Message.alert(target, world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅 공유가 취소되었습니다.");
 			}

@@ -3,7 +3,7 @@ package solo.sololand.event.room;
 import cn.nukkit.Player;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.HandlerList;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.land.Room;
 
 public class RoomEnterEvent extends RoomEvent implements Cancellable{
