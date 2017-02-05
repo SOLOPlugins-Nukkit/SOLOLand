@@ -6,7 +6,6 @@ import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockChest;
 import cn.nukkit.block.BlockDoor;
 import cn.nukkit.block.BlockEnderChest;
-import cn.nukkit.block.BlockWorkbench;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventHandler;
@@ -18,7 +17,6 @@ import cn.nukkit.event.block.BlockBurnEvent;
 import cn.nukkit.event.player.PlayerLoginEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.event.player.PlayerDeathEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -27,8 +25,6 @@ import cn.nukkit.event.entity.EntityExplosionPrimeEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.level.particle.Particle;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.GenericParticle;
 
 import java.util.HashMap;
@@ -39,20 +35,20 @@ import java.util.Random;
 import solo.sololand.Main;
 import solo.sololand.event.land.LandEnterEvent;
 import solo.sololand.event.land.LandLeaveEvent;
-import solo.sololand.event.player.PlayerFloorMoveEvent;
 import solo.sololand.event.room.RoomEnterEvent;
 import solo.sololand.event.room.RoomLeaveEvent;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Message;
+import solo.solobasepackage.util.Message;
 import solo.sololand.queue.Queue;
-import solo.sololand.external.Economy;
-import solo.sololand.external.Debug;
+import solo.solobasepackage.event.player.PlayerFloorMoveEvent;
+import solo.solobasepackage.util.Debug;
+import solo.solobasepackage.util.Economy;
 
 public class EventListener implements Listener{
 
-	private Map<String, Position> movePos = new HashMap<String, Position>();
+	//private Map<String, Position> movePos = new HashMap<String, Position>();
 	private Map<String, Land> currentLandList = new HashMap<String, Land>();
 	private Map<String, Room> currentRoomList = new HashMap<String, Room>();
 	private Map<String, Long> lastPick = new HashMap<String, Long>();
@@ -102,7 +98,7 @@ public class EventListener implements Listener{
 		Message.alert(player, "아이템을 주울 수 없습니다");
 	}
 	
-	@EventHandler
+	/*@EventHandler
 	public void onMove(PlayerMoveEvent event){
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -123,7 +119,7 @@ public class EventListener implements Listener{
 		}else{
 			this.movePos.put(name, currentPos);
 		}
-	}
+	}*/
 	
 	@EventHandler
 	public void onFloorMove(PlayerFloorMoveEvent event){
@@ -147,25 +143,26 @@ public class EventListener implements Listener{
 				if(currentRoom == null || currentRoom != room){
 					
 					//room welcomeMessage part
-					String welcomeRoomMessage = "[" + Integer.toString(room.getNumber()) + "번 방] ";
+					StringBuilder sb = new StringBuilder();
+					sb.append("[" + Integer.toString(room.getNumber()) + "번 방] ");
 					if(room.isOwner("")){
-						welcomeRoomMessage += "주인이 없습니다";
+						sb.append("주인이 없습니다");
 					}else if(room.isOwner(player)){
-						welcomeRoomMessage += "본인의 방입니다";
+						sb.append("본인의 방입니다");
 					}else if(room.isMember(player)){
-						welcomeRoomMessage += room.getOwner() + "님으로 부터 공유받은 방입니다";
+						sb.append(room.getOwner() + "님으로 부터 공유받은 방입니다");
 					}else{
-						welcomeRoomMessage += room.getOwner() + "님의 방입니다";
+						sb.append(room.getOwner() + "님의 방입니다");
 					}
 					if(! room.getWelcomeMessage().equals("")){
-						welcomeRoomMessage += "\n" + room.getWelcomeMessage();
+						sb.append("\n" + room.getWelcomeMessage());
 					}
 					if(room.isSail()){
-						welcomeRoomMessage += "\n현재 " + Double.toString(room.getPrice()) + "원에 판매중입니다";
+						sb.append("\n현재 " + Double.toString(room.getPrice()) + "원에 판매중입니다");
 					}
 					
 					//call RoomEnterEvent
-					RoomEnterEvent roomEnterEv = new RoomEnterEvent(player, room, welcomeRoomMessage, Message.TYPE_TIP);
+					RoomEnterEvent roomEnterEv = new RoomEnterEvent(player, room, sb.toString()/* welcomeMessage */, Message.TYPE_TIP);
 					Server.getInstance().getPluginManager().callEvent(roomEnterEv);
 					if(! roomEnterEv.isCancelled()){
 						Message.normal(player, roomEnterEv.getWelcomeMessage(), roomEnterEv.getMessageType());
@@ -191,25 +188,26 @@ public class EventListener implements Listener{
 			if(currentLand == null || currentLand != land){
 			
 				//welcomeMessage part
-				String welcomeMessage = "[" + Integer.toString(land.getNumber()) + "번 땅] ";
+				StringBuilder sb = new StringBuilder();
+				sb.append("[" + Integer.toString(land.getNumber()) + "번 땅] ");
 				if(land.isOwner("")){
-					welcomeMessage += "주인이 없습니다";
+					sb.append("주인이 없습니다");
 				}else if(land.isOwner(name)){
-					welcomeMessage += "본인의 땅입니다";
+					sb.append("본인의 땅입니다");
 				}else if(land.isMember(name)){
-					welcomeMessage += land.getOwner() + "님으로 부터 공유받은 땅입니다";
+					sb.append(land.getOwner() + "님으로 부터 공유받은 땅입니다");
 				}else{
-					welcomeMessage += land.getOwner() + "님의 땅입니다";
+					sb.append(land.getOwner() + "님의 땅입니다");
 				}
 				if(! land.getWelcomeMessage().equals("")){
-					welcomeMessage += "\n" + land.getWelcomeMessage();
+					sb.append("\n" + land.getWelcomeMessage());
 				}
 				if(land.isSail()){
-					welcomeMessage += "\n현재 " + Double.toString(land.getPrice()) + "원에 판매중입니다";
+					sb.append("\n현재 " + Double.toString(land.getPrice()) + "원에 판매중입니다");
 				}
 				
 				//call LandEnterEvent
-				LandEnterEvent landEnterEv = new LandEnterEvent(player, land, welcomeMessage, land.getWelcomeParticle(), Message.TYPE_TIP);
+				LandEnterEvent landEnterEv = new LandEnterEvent(player, land, sb.toString()/*welcomeMessage*/, land.getWelcomeParticle(), Message.TYPE_TIP);
 				Server.getInstance().getPluginManager().callEvent(landEnterEv);
 				
 				if(! landEnterEv.isCancelled()){
@@ -257,14 +255,18 @@ public class EventListener implements Listener{
 			! land.isOwner(event.getPlayer()) &&
 			! land.isMember(event.getPlayer())
 		){
+			boolean canEnter = false;
 			for(Room room : land.getRooms().values()){
 				if(
-					! room.isOwner(event.getPlayer()) &&
-					! room.isMember(event.getPlayer())
+					room.isOwner(event.getPlayer()) ||
+					room.isMember(event.getPlayer())
 				){
-					Message.alert(event.getPlayer(), "출입이 허용되지 않은 땅입니다", Message.TYPE_POPUP);
-					event.setCancelled();
+					canEnter = true;
 				}
+			}
+			if(! canEnter){
+				Message.alert(event.getPlayer(), "출입이 허용되지 않은 땅입니다", Message.TYPE_POPUP);
+				event.setCancelled();
 			}
 		}
 	}
@@ -279,7 +281,7 @@ public class EventListener implements Listener{
 		Queue.clean(event.getPlayer());
 		
 		String name = event.getPlayer().getName().toLowerCase();
-		this.movePos.remove(name);
+		//this.movePos.remove(name);
 		this.currentLandList.remove(name);
 		this.currentRoomList.remove(name);
 		this.lastPick.remove(name);
@@ -329,9 +331,13 @@ public class EventListener implements Listener{
 				Player player = (Player) ev.getEntity();
 				Land land = world.getLand(player.getFloorX(), player.getFloorZ());
 
-				if(land != null && !land.isAllowFight()){
-					event.setCancelled();
-				}else if(! world.isAllowFight()){
+				if(land != null){
+					if(! land.isAllowFight()){
+						event.setCancelled();
+					}
+					return;
+				}
+				if(! world.isAllowFight()){
 					event.setCancelled();
 				}
 			}

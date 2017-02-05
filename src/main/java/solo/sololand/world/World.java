@@ -14,11 +14,11 @@ import java.util.LinkedHashMap;
 import java.io.File;
 import java.util.ArrayList;
 
+import solo.solobasepackage.util.Debug;
 import solo.sololand.Main;
 import solo.sololand.command.defaults.custom.CustomWorldCommand;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
-import solo.sololand.external.Debug;
 
 public class World{
 
