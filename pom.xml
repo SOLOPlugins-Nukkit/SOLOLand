@@ -4,7 +4,7 @@
 
 	<groupId>solo</groupId>
 	<artifactId>sololand</artifactId>
-	<version>2.1.0</version>
+	<version>2.2.0</version>
 	<packaging>jar</packaging>
 	
 	<repositories>
@@ -63,12 +63,11 @@
 			<version>1.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--
 		<dependency>
 			<groupId>solo</groupId>
-			<artifactId>solosystem</artifactId>
-			<version>0.0.1</version>
+			<artifactId>solobasepackage</artifactId>
+			<version>0.1.2</version>
+			<scope>provided</scope>
 		</dependency>
-		-->
 	</dependencies>
 </project>
