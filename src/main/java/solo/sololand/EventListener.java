@@ -64,7 +64,7 @@ public class EventListener implements Listener{
 	//	Debug.normal(Main.getInstance(), event.getPlayer().getName() + " : " + event.getMessage());
 	//}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPickupItem(InventoryPickupItemEvent event){
 		if(!(event.getInventory().getHolder() instanceof Player)){
 			return;
@@ -418,17 +418,17 @@ public class EventListener implements Listener{
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onBreak(BlockBreakEvent event){
 		this.onBlockModify(event, event.getPlayer(), event.getBlock());
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlace(BlockPlaceEvent event){
 		this.onBlockModify(event, event.getPlayer(), event.getBlock());
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onInteract(PlayerInteractEvent event){
 		Player player = event.getPlayer();
 

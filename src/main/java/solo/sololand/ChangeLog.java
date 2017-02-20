@@ -164,6 +164,11 @@ CHANGELOG
 - 땅에서 pvp를 허용하더라도 월드가 pvp를 허용하지 않으면 pvp가 안되던 버그 수정
 - 땅 출입금지 상태에서도 출입이 되던 버그 수정
 
+2.3.0
+- 알림 기능 추가 (SOLONotification 플러그인 필요)
+- SOLOBasePackage 0.3.0 이상 필요
+- Gridland preset 기능 추가. 이제 평야를 원하는 대로 커스텀할 수 있습니다.
+
 TODO:
 - 영어 지원
 - /월드 방정보 명령어 추가

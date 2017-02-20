@@ -151,6 +151,7 @@ class DelayedTask extends Task{
 		this.player = player;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onRun(int currentTick) {
 		if(Queue.get(this.player) != Queue.NULL){

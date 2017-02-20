@@ -7,6 +7,7 @@ import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.sololand.task.ShowBorderLineTask;
 import solo.sololand.util.Setting;
+import solo.sololand.world.World;
 
 import java.util.HashMap;
 
@@ -43,10 +44,10 @@ public class Queue{
 	
 	public static HashMap<String, Position> positionList = new HashMap<String, Position>();
 	
-	public static HashMap<String, Land> landList = new HashMap<String, Land>();
+	public static HashMap<String, Integer> landList = new HashMap<String, Integer>();
 	public static HashMap<String, Land> temporaryLandList = new HashMap<String, Land>();
 	
-	public static HashMap<String, Room> roomList = new HashMap<String, Room>();
+	public static HashMap<String, String> roomList = new HashMap<String, String>();
 	public static HashMap<String, Room> temporaryRoomList = new HashMap<String, Room>();
 	
 	public static HashMap<String, Integer> intList = new HashMap<String, Integer>();
@@ -56,6 +57,7 @@ public class Queue{
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void set(Player player, int queueType){
 		if(Setting.enableBorderLineParticle && get(player) == NULL){
 			Server.getInstance().getScheduler().scheduleAsyncTask(new ShowBorderLineTask(player));
@@ -88,16 +90,13 @@ public class Queue{
 	}
 	
 	public static void setLand(Player player, Land land){
-		landList.put(player.getName().toLowerCase(), land);
+		landList.put(player.getName().toLowerCase(), land.getNumber());
 	}
 	
 	public static Land getLand(Player player){
 		String name = player.getName().toLowerCase();
 		if(landList.containsKey(name)){
-			Land land = landList.get(name);
-			if(land.getWorld().isExistLand(land.getNumber())){
-				return land.getWorld().getLand(land.getNumber());
-			}
+			return World.get(player.getLevel()).getLand(landList.get(name));
 		}
 		return null;
 	}
@@ -114,16 +113,20 @@ public class Queue{
 		return null;
 	}
 	
-	public static void setRoom(Player player, Room room){
-		roomList.put(player.getName().toLowerCase(), room);
+	public static void setRoom(Player player, String address){
+		roomList.put(player.getName().toLowerCase(), address);
 	}
 	
 	public static Room getRoom(Player player){
 		String name = player.getName().toLowerCase();
 		if(roomList.containsKey(name)){
-			Room room = roomList.get(name);
-			if(room.getLand().isExistRoom(room.getNumber())){
-				return room.getLand().getRoom(room.getNumber());
+			String address = roomList.get(name);
+			int landNum = Integer.parseInt(address.split("-")[0]);
+			Land land = World.get(player.getLevel()).getLand(landNum);
+			if(land != null){
+				int roomNum = Integer.parseInt(address.split("-")[1]);
+				Room room = land.getRoom(roomNum);
+				return room;
 			}
 		}
 		return null;
