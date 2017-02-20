@@ -80,7 +80,7 @@ public class LandCreate extends SubCommand{
 						}
 						Economy.reduceMoney(player, price);
 					}
-					world.setLand(land.getWorld().getNextLandNumber(), land);
+					world.setLand(world.getNextLandNumber(), land);
 					Message.normal(player, "성공적으로 땅을 생성하였습니다. 땅 번호는 " + Integer.toString(land.getNumber()) + "번 입니다.");
 					Queue.clean(player);
 				}catch( Exception e){

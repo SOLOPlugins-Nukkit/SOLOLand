@@ -97,7 +97,7 @@ public class RoomCreate extends SubCommand{
 						}
 						Economy.reduceMoney(player, price);
 					}
-					land.setRoom(room.getLand().getNextRoomNumber(), room);
+					land.setRoom(land.getNextRoomNumber(), room);
 					Message.normal(player, "성공적으로 방을 생성하였습니다. 방 번호는 " + Integer.toString(room.getNumber()) + "번 입니다.");
 					Queue.clean(player);
 				}catch(Exception e){

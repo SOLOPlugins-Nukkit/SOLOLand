@@ -9,6 +9,7 @@ import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 
 public class RoomGive extends SubCommand{
 
@@ -58,7 +59,8 @@ public class RoomGive extends SubCommand{
 		room.clear();
 		room.setOwner(targetName);
 		Message.normal(player, target.getName() + "님에게 " + Integer.toString(land.getNumber()) + "번 방을 주었습니다.");
-		Message.normal(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 양도하셨습니다.");
+		
+		Notification.addNotification(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 양도하셨습니다.");
 		return true;
 	}
 }

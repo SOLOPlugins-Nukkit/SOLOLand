@@ -8,6 +8,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 
 public class LandGive extends SubCommand{
 
@@ -52,7 +53,8 @@ public class LandGive extends SubCommand{
 		land.clear();
 		land.setOwner(target);
 		Message.normal(player, target.getName() + "님에게 " + Integer.toString(land.getNumber()) + "번 땅을 양도 처리 하였습니다.");
-		Message.normal(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 양도하셨습니다.");
+		
+		Notification.addNotification(target, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 양도하셨습니다.");
 		return true;
 	}
 }

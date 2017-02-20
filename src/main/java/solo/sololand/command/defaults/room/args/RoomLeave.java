@@ -7,6 +7,7 @@ import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 
 public class RoomLeave extends SubCommand{
 
@@ -32,11 +33,13 @@ public class RoomLeave extends SubCommand{
 		if(room.isOwner(player)){
 			room.setOwner("");
 			Message.normal(player, "방에서 나갔습니다.");
+			Notification.addNotification(land.getOwner(), player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방에서 나갔습니다.");
 			return true;
 		}
 		if(room.isMember(player)){
 			room.removeMember(player);
 			Message.normal(player, "공유받던 방에서 나갔습니다.");
+			Notification.addNotification(room.getOwner(), player.getName() + "님이 " + world.getCustomName() + " 월드의 공유받던 " + room.getAddress() + "번 방에서 나갔습니다.");
 			return true;
 		}
 		Message.alert(player, "이 방을 소유하고 있지 않거나 공유받고 있지 않습니다.");

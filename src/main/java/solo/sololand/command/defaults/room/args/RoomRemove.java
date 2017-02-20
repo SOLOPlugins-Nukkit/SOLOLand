@@ -38,7 +38,7 @@ public class RoomRemove extends SubCommand{
 		switch(Queue.get(player)){
 			case Queue.NULL:
 				Queue.set(player, Queue.ROOM_REMOVE);
-				Queue.setRoom(player, room);
+				Queue.setRoom(player, room.getAddress());
 				Message.normal(player, "정말로 방을 제거하시겠습니까? 제거하시려면 /방 삭제 명령어를 한번 더 입력해주세요.");
 				Message.normal(player, "취소하려면 /방 취소 명령어를 입력해주세요.");
 				break;

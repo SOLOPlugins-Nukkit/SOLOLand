@@ -9,6 +9,7 @@ import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 
 public class RoomCancelShare extends SubCommand{
 
@@ -64,9 +65,8 @@ public class RoomCancelShare extends SubCommand{
 			}
 			room.removeMember(targetName);
 			Message.normal(player, targetName + "님을 공유 취소 하였습니다.");
-			if(target != null){
-				Message.alert(target, world.getCustomName() + " 월드의 " + room.getAddress() + "번 방 공유가 취소되었습니다.");
-			}
+			
+			Notification.addNotification(target, world.getCustomName() + " 월드의 " + room.getAddress() + "번 방 공유가 취소되었습니다.");
 		}
 		return true;
 	}

@@ -1,6 +1,5 @@
 package solo.sololand.command.defaults.land.args;
 
-
 import java.util.ArrayList;
 
 import cn.nukkit.Player;

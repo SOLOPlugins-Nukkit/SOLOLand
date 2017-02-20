@@ -6,6 +6,7 @@ import cn.nukkit.command.data.CommandParameter;
 import solo.solobasepackage.util.Message;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public abstract class MainCommand extends BaseCommand{
 
@@ -47,17 +48,9 @@ public abstract class MainCommand extends BaseCommand{
 			}
 			for(CommandParameter commandParam : commandParams){
 				sb.append(" ");
-				if(commandParam.optional){
-					sb.append("<");
-				}else{
-					sb.append("[");
-				}
+				sb.append((commandParam.optional) ? "<" : "[");
 				sb.append(commandParam.name);
-				if(commandParam.optional){
-					sb.append(">");
-				}else{
-					sb.append("]");
-				}
+				sb.append((commandParam.optional) ? ">" : "]");
 			}
 		}
 		return sb.toString();
@@ -99,11 +92,11 @@ public abstract class MainCommand extends BaseCommand{
 		this.sendHelp(sender, 1);
 	}
 	public void sendHelp(CommandSender sender, int page){
-		ArrayList<String> lines = new ArrayList<String>();
+		LinkedHashMap<String, String> help = new LinkedHashMap<String, String>();
 		for(SubCommand subCommand : this.getAvailable(sender)){
-			lines.add(this.getFullDescription(subCommand));
+			help.put(this.getUsage(subCommand), subCommand.getDescription());
 		}
-		Message.page(sender, this.getName() + " 명령어 도움말", lines, page);
+		Message.commandHelp(sender, this.getName() + " 명령어 도움말", help, page);
 	}
 	
 	public ArrayList<SubCommand> getSubCommands(){

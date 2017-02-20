@@ -7,6 +7,7 @@ import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 
 public class RoomKick extends SubCommand{
 
@@ -35,6 +36,8 @@ public class RoomKick extends SubCommand{
 		}
 		Message.normal(player, room.getOwner() + "님을 방에서 추방시켰습니다.");
 		room.setOwner("");
+		
+		Notification.addNotification(room.getOwner(), world.getCustomName() + " 월드의 " + room.getAddress() + "번 방에서 추방당하였습니다.");
 		return true;
 	}
 }

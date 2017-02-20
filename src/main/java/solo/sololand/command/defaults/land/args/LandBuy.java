@@ -8,6 +8,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 import solo.solobasepackage.util.Economy;
 
 public class LandBuy extends SubCommand{
@@ -49,9 +50,8 @@ public class LandBuy extends SubCommand{
 		}
 		Economy.addMoney(land.getOwner(), landPrice);
 		Player prevOwner = Server.getInstance().getPlayerExact(land.getOwner());
-		if(prevOwner != null){
-			Message.normal(prevOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 구매하셨습니다.");
-		}
+		
+		Notification.addNotification(prevOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + Integer.toString(land.getNumber()) + "번 땅을 구매하셨습니다.");
 
 		land.clear();
 		land.setOwner(player);

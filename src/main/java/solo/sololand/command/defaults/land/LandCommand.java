@@ -10,6 +10,9 @@ public class LandCommand extends MainCommand{
 
 		this.setPermission("sololand.command.land", true);
 
+		//test code
+		this.registerSubCommand(new LandTest());
+		
 		this.registerSubCommand(new LandCreate());
 		this.registerSubCommand(new LandInfo());
 		this.registerSubCommand(new LandMove());

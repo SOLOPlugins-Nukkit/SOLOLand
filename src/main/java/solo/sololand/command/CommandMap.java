@@ -7,6 +7,7 @@ import cn.nukkit.command.PluginCommand;
 
 import java.util.LinkedHashMap;
 import solo.sololand.Main;
+import solo.solobasepackage.util.CommandUtil;
 import solo.solobasepackage.util.Debug;
 import solo.solobasepackage.util.Message;
 
@@ -46,7 +47,7 @@ public class CommandMap<T extends BaseCommand>{
 		if(!this.commands.containsKey(name)){
 			return false;
 		}
-		this.commands.remove(name);
+		CommandUtil.unregisterCommand(this.commands.remove(name).getName());
 		return true;
 	}
 

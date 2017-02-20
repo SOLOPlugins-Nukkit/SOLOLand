@@ -11,6 +11,8 @@ import solo.solobasepackage.util.ArrayUtil;
 import solo.solobasepackage.util.Message;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorldCreate extends SubCommand{
 
@@ -20,7 +22,8 @@ public class WorldCreate extends SubCommand{
 		this.setPermission("sololand.command.world.create");
 		this.addCommandParameters(new CommandParameter[]{
 			new CommandParameter("월드 이름", CommandParameter.ARG_TYPE_STRING, false),
-			new CommandParameter("타입(제너레이터)", CommandParameter.ARG_TYPE_STRING, false)
+			new CommandParameter("타입(제너레이터)", CommandParameter.ARG_TYPE_STRING, false),
+			new CommandParameter("프리셋", CommandParameter.ARG_TYPE_STRING, true)
 		});
 	}
 
@@ -58,8 +61,16 @@ public class WorldCreate extends SubCommand{
 		File dir = new File(Server.getInstance().getDataPath() + File.separator + "worlds" + File.separator + args[0]);
 		dir.mkdir();
 
+		Map<String, Object> options = new HashMap<>();
+		if(args.length > 2){
+			StringBuilder sb = new StringBuilder();
+			for(int i = 2; i < args.length; i++){
+				sb.append(args[i]);
+			}
+			options.put("preset", sb.toString());
+		}
 		//seed is currentTimeMillis
-		boolean isCreated = Server.getInstance().generateLevel(args[0], System.currentTimeMillis(), generator);
+		boolean isCreated = Server.getInstance().generateLevel(args[0], System.currentTimeMillis(), generator, options);
 		if(!isCreated){
 			if(!Server.getInstance().loadLevel(args[0])){
 				Message.alert(sender, "알 수 없는 오류로 월드 생성에 실패하였습니다.");

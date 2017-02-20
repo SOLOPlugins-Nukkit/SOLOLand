@@ -72,7 +72,7 @@ public class RoomSell extends SubCommand{
 				Message.normal(player, "방을 정말로 매물에 등록하시겠습니까? 방이 매물에 등록되어있는 동안엔 방을 수정할 수 없습니다.");
 				Message.normal(player, Double.toString(sell) + "원으로 매물에 등록하려면 /방 판매 명령어를 다시 한번 입력해주세요.");
 				Queue.set(player, Queue.ROOM_SELL);
-				Queue.setRoom(player, room);
+				Queue.setRoom(player, room.getAddress());
 				Queue.setDouble(player, sell);
 				break;
 		}

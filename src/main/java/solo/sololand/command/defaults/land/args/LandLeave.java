@@ -6,6 +6,7 @@ import solo.sololand.command.SubCommand;
 import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 
 public class LandLeave extends SubCommand{
 
@@ -33,6 +34,8 @@ public class LandLeave extends SubCommand{
 		}
 		land.removeMember(player);
 		Message.normal(player, "성공적으로 공유받던 땅에서 나갔습니다.");
+		
+		Notification.addNotification(land.getOwner(), player.getName() + "님이 " + Integer.toString(land.getNumber()) + "번 땅의 공유를 포기하였습니다.");
 		return true;
 	}
 }

@@ -1,6 +1,5 @@
 package solo.sololand.command.defaults.room.args;
 
-import cn.nukkit.Server;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
@@ -9,6 +8,7 @@ import solo.sololand.world.World;
 import solo.sololand.land.Land;
 import solo.sololand.land.Room;
 import solo.solobasepackage.util.Message;
+import solo.solobasepackage.util.Notification;
 import solo.solobasepackage.util.Economy;
 
 public class RoomBuy extends SubCommand{
@@ -52,10 +52,8 @@ public class RoomBuy extends SubCommand{
 		//}
 		Economy.reduceMoney(player, roomPrice);
 		Economy.addMoney(land.getOwner(), roomPrice);
-		Player landOwner = Server.getInstance().getPlayerExact(land.getOwner());
-		if(landOwner != null){
-			Message.normal(landOwner, player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 구매하셨습니다.");
-		}
+		
+		Notification.addNotification(land.getOwner(), player.getName() + "님이 " + world.getCustomName() + " 월드의 " + room.getAddress() + "번 방을 구매하셨습니다.");
 
 		room.clear();
 		room.setOwner(player);
