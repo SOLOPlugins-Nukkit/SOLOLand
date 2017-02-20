@@ -1,5 +1,5 @@
 name: SOLOLand
-version: "2.2.0"
+version: "2.3.0"
 api: ["1.0.0"]
 author: solo
 main: solo.sololand.Main
